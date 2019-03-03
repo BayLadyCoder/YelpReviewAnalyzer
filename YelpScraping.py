@@ -103,14 +103,11 @@ def getTheName(info, index):
 
 def printNamesAndReviews(info):
     j = 1
-    names = []
-
     while j < len(info[0]):
         number = str(j)+"."
         review = info[2][j]
         reviews = "("+review+")"
         print(number, info[0][j], reviews)
-        names.append(info[1][j])
         j += 1
 
 
