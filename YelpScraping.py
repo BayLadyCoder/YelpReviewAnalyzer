@@ -138,6 +138,7 @@ def findTotalPages(soup):
 
  # Scraping all reviews
 def scrapeReviews(link, totalPages):
+    allReviews = []
     link = link[:-1]
     page = 1
     countReviews = 1
@@ -155,11 +156,21 @@ def scrapeReviews(link, totalPages):
         soup = runBeautifulSoup(url)
         # print all reviews
         for p in soup.find_all('p', {"lang": "en"}):
-            print(countReviews)
-            print(p.text, '\n')
+            # print(countReviews)
+            review = p.text
+            # print(review, '\n')
+            allReviews.append(review)
             countReviews += 1
         page += 1
+    return allReviews
 
+
+def printAllReviews(reviewsList):
+    i = 1
+    print(len(reviewsList))
+    for review in reviewsList:
+        print(i, '\n', review, '\n')
+        i+=1
 
 def start():
     # Get user input
@@ -195,9 +206,12 @@ def start():
     # find Total pages of reviews
     totalPages = findTotalPages(soup2)
 
-    # scraping all reviews from all the pages
-    scrapeReviews(thePlaceURL, totalPages)
+    # scraping all reviews from all the pages (return a list of all reviews)
+    allReviews = scrapeReviews(thePlaceURL, totalPages)
 
+    # print all reviews
+    printAllReviews(allReviews)
+    #print(allReviews)
 
 # -------------------------------------------------------------------------------------
 # ------------------ Program starts here -------------------
