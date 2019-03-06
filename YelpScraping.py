@@ -3,23 +3,28 @@ from bs4 import BeautifulSoup
 
 
 # ------- Home Page ------- #
-
 # searchURL = "https://www.yelp.com/search?find_desc=thai%20food&find_loc=owings%20mills"
 # example = "https://www.yelp.com/search?find_desc=sushi&find_loc=baltimore"
 
+# Get user input
+def getUserInput():
+    userInput = []
+    find = input('What kind of food you are looking for: ')
+    near = input('Location: ')
+    userInput.append(find)
+    userInput.append(near)
+    return userInput
 
 # find url from the user search input
-def searchListURL(what, where):
+def searchListURL(userInput):
     Yelp = "https://www.yelp.com/search?find_desc="
-    what = what.replace(' ', '%20')
-    where = '&find_loc=' + where.replace(' ', '%20')
+    what = userInput[0].replace(' ', '%20')
+    where = '&find_loc=' + userInput[1].replace(' ', '%20')
     searchURL = Yelp + what + where
     # print(searchURL)
     return searchURL
 
 # get code and build BeautifulSoup object
-
-
 def runBeautifulSoup(url):
     result = requests.get(url)
     src = result.content
@@ -27,8 +32,6 @@ def runBeautifulSoup(url):
     return soup
 
 # find all restaurants and their links(url) based on user searching input
-
-
 def findSearchInfo(soup):
     restaurants = []
     links = []
@@ -50,8 +53,6 @@ def findSearchInfo(soup):
     return info
 
 # print all restaurants' names and their links
-
-
 def printAllInfo(info):
     i = 0
     while i < len(info):
@@ -63,8 +64,6 @@ def printAllInfo(info):
         i += 1
 
 # get all the links from user search input
-
-
 def getAllLinks(info):
     j = 1
     links = []
@@ -75,8 +74,6 @@ def getAllLinks(info):
     return links
 
 # get all restaurants' names from user search input
-
-
 def getAllNames(info):
     j = 1
     names = []
@@ -87,20 +84,18 @@ def getAllNames(info):
     return names
 
 # get a specific link (when user choose a restaurant)
-
-
 def getTheLink(info, index):
     print(info[1][index])
     return info[1][index]
 
 # get a specific name of a restaurant (chosen restaurant)
-
-
 def getTheName(info, index):
     print(info[0][index])
     return info[0][index]
 
 
+# Print all names of the places and the numbers of reviews
+# with their index number for the user to choose
 def printNamesAndReviews(info):
     j = 1
     while j < len(info[0]):
@@ -111,13 +106,13 @@ def printNamesAndReviews(info):
         j += 1
 
 
-# ------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 
 # ------- Get the Reviews Page (The Chosen Restaurant Page) ------- #
-
-def createThePlaceURL(link, find):
+def createThePlaceURL(link, userInput):
     # example = "https://www.yelp.com/biz/baltimore-built-bistro-b3-baltimore-3?start=1"
     Yelp = "https://www.yelp.com"
+    find = userInput[0]
     toBeRemoved = -(len(find)+5)
 
     # print(toBeRemoved)
@@ -128,8 +123,6 @@ def createThePlaceURL(link, find):
     return url
 
 # find total pages (reviews)
-
-
 def findTotalPages(soup):
     totalPages = ''
     for div in soup.find_all('div', class_="page-of-pages"):
@@ -144,8 +137,6 @@ def findTotalPages(soup):
     return totalPages
 
  # Scraping all reviews
-
-
 def scrapeReviews(link, totalPages):
     link = link[:-1]
     page = 1
@@ -172,19 +163,18 @@ def scrapeReviews(link, totalPages):
 
 def start():
     # Get user input
-    find = input('What kind of food you are looking for: ')
-    near = input('Location: ')
+    userInput = getUserInput()
 
     # Get search URL (List of restaurants/Places Page)
-    searchListUrl = searchListURL(find, near)
+    searchListUrl = searchListURL(userInput)
 
     # created BeautifulSoup object
-    soup = runBeautifulSoup(searchListUrl)
+    soup1 = runBeautifulSoup(searchListUrl)
 
     # get all 'info' (names, links(href), and numbers of reviews)
     # (scrape the 'info' of the places in the list (30 featured places), then store them into a list
     # the list (30 featured places) can be different, based on user input)
-    info = findSearchInfo(soup)
+    info = findSearchInfo(soup1)
 
     # Print all names and numbers of reviews for user to choose
     printNamesAndReviews(info)
@@ -197,18 +187,18 @@ def start():
     theLink = getTheLink(info, chosenPlace)
 
     # create real/working url
-    thePlaceURL = createThePlaceURL(theLink, find)
+    thePlaceURL = createThePlaceURL(theLink, userInput)
 
     # create Beautiful Soup object
-    soup = runBeautifulSoup(thePlaceURL)
+    soup2 = runBeautifulSoup(thePlaceURL)
 
     # find Total pages of reviews
-    totalPages = findTotalPages(soup)
+    totalPages = findTotalPages(soup2)
 
     # scraping all reviews from all the pages
     scrapeReviews(thePlaceURL, totalPages)
 
 
-# ------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
 # ------------------ Program starts here -------------------
 start()
