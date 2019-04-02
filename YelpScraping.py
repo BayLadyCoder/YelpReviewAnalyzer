@@ -31,25 +31,31 @@ def runBeautifulSoup(url):
     soup = BeautifulSoup(src, 'lxml')
     return soup
 
-# find all restaurants and their links(url) based on user searching input
+# find a list of restaurants, their links(url), and numbers of reviews based on user searching input
 def findSearchInfo(soup):
     restaurants = []
     links = []
     reviews = []
     info = []
-    for h3 in soup.find_all('h3', class_="alternate__373c0__1uacp"):
-        for a in h3.findChildren('a'):
-            restaurant = a.text
-            link = a.get('href')
-            restaurants.append(restaurant)
-            links.append(link)
-    # BUGS when no review it skips, creates wrong matching numbers of reviews and restaurants
-    for span in soup.find_all('span', class_="reviewCount__373c0__2r4xT"):
-        review = span.text
-        reviews.append(review)
+    for div in soup.find_all('div', class_="mainAttributes__373c0__1r0QA"):
+        for h3 in div.findChildren('h3', class_="alternate__373c0__1uacp"):
+            for a in h3.findChildren('a'):
+                restaurant = a.text
+                link = a.get('href')
+                restaurants.append(restaurant)
+                links.append(link)
+        if(div.findChildren('span', class_="reviewCount__373c0__2r4xT")):
+            for span in div.findChildren('span', class_="reviewCount__373c0__2r4xT"):
+                review = span.text
+                reviews.append(review)
+        else:
+            review = "0 review"
+            reviews.append(review)
+
     info.append(restaurants)
     info.append(links)
     info.append(reviews)
+
     return info
 
 # print all restaurants' names and their links
