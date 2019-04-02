@@ -31,6 +31,20 @@ def runBeautifulSoup(url):
     soup = BeautifulSoup(src, 'lxml')
     return soup
 
+# find total list of restaurant pages (reviews)
+def findTotalRestaurantListPages(soup):
+    totalPages = ''     
+    for div in soup.find_all('div', {'role':'navigation'}):
+        for span in div.find_all("span", {'class':["lemon--span__373c0__3997G", "text__373c0__2pB8", "text-color--normal__373c0__K_MKN", "text-align--left__373c0__2pnx_"]}):
+            if "Page" in span.text:
+                print(span.text)
+                pageOfPages = span.text.strip()
+                totalPages = pageOfPages[10:]
+                print(totalPages)
+                totalPages = int(totalPages)
+            
+    return totalPages
+
 # find a list of restaurants, their links(url), and numbers of reviews based on user searching input
 def findSearchInfo(soup):
     restaurants = []
@@ -129,16 +143,11 @@ def createThePlaceURL(link, userInput):
     return url
 
 # find total pages (reviews)
-def findTotalPages(soup):
+def findTotalReviewsPages(soup):
     totalPages = ''
     for div in soup.find_all('div', class_="page-of-pages"):
-        # print(div.text)
         pageOfPages = div.text.strip()
-        # print(pageOfPages)
-        # print(len(pageOfPages))
         totalPages = pageOfPages[10:]
-        # print(pageOfPages)
-        # print(totalPages)
         totalPages = int(totalPages)
     return totalPages
 
