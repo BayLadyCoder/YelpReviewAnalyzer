@@ -31,46 +31,62 @@ def runBeautifulSoup(url):
     soup = BeautifulSoup(src, 'lxml')
     return soup
 
-# find total list of restaurant pages (reviews)
+# find total pages of the list of restaurant
 def findTotalRestaurantListPages(soup):
     totalPages = ''     
     for div in soup.find_all('div', {'role':'navigation'}):
         for span in div.find_all("span", {'class':["lemon--span__373c0__3997G", "text__373c0__2pB8", "text-color--normal__373c0__K_MKN", "text-align--left__373c0__2pnx_"]}):
             if "Page" in span.text:
-                print(span.text)
+                #print(span.text)
                 pageOfPages = span.text.strip()
                 totalPages = pageOfPages[10:]
-                print(totalPages)
+                #print(totalPages)
                 totalPages = int(totalPages)
             
     return totalPages
 
-# find a list of restaurants, their links(url), and numbers of reviews based on user searching input
-def findSearchInfo(soup):
+# Get a list of restaurants, their links(url), and numbers of reviews based on user searching input
+def scrapRestaurantList(link, totalListPages):
+    page = 1
+    startAt = 0
     restaurants = []
     links = []
     reviews = []
     info = []
-    for div in soup.find_all('div', class_="mainAttributes__373c0__1r0QA"):
-        for h3 in div.findChildren('h3', class_="alternate__373c0__1uacp"):
-            for a in h3.findChildren('a'):
-                restaurant = a.text
-                link = a.get('href')
-                restaurants.append(restaurant)
-                links.append(link)
-        if(div.findChildren('span', class_="reviewCount__373c0__2r4xT")):
-            for span in div.findChildren('span', class_="reviewCount__373c0__2r4xT"):
-                review = span.text
+    # startAt = start at restaurant number(1,30,60,90) this is for the url
+    while page <= totalListPages:
+        if page == 1:
+            url = link
+        elif page > 1:
+            startAt = (page-1)*30
+            strStartAt = str(startAt)
+            url = link+strStartAt
+        pageOfPages = "(Page " + str(page) + " of " + str(totalListPages) + ")"
+        print(url, pageOfPages)
+        soup2 = runBeautifulSoup(url)
+
+        for div in soup2.find_all('div', class_="mainAttributes__373c0__1r0QA"):
+            for h3 in div.findChildren('h3', class_="alternate__373c0__1uacp"):
+                for a in h3.findChildren('a'):
+                    restaurant = a.text
+                    href = a.get('href')
+                    restaurants.append(restaurant)
+                    links.append(href)
+            if(div.findChildren('span', class_="reviewCount__373c0__2r4xT")):
+                for span in div.findChildren('span', class_="reviewCount__373c0__2r4xT"):
+                    review = span.text
+                    reviews.append(review)
+            else:
+                review = "0 review"
                 reviews.append(review)
-        else:
-            review = "0 review"
-            reviews.append(review)
+        page += 1
 
     info.append(restaurants)
     info.append(links)
     info.append(reviews)
 
     return info
+
 
 # print all restaurants' names and their links
 def printAllInfo(info):
@@ -143,7 +159,7 @@ def createThePlaceURL(link, userInput):
     return url
 
 # find total pages (reviews)
-def findTotalReviewsPages(soup):
+def findTotalReviewPages(soup):
     totalPages = ''
     for div in soup.find_all('div', class_="page-of-pages"):
         pageOfPages = div.text.strip()
@@ -192,15 +208,17 @@ def start():
     userInput = getUserInput()
 
     # Get search URL (List of restaurants/Places Page)
-    searchListUrl = searchListURL(userInput)
+    listURL = searchListURL(userInput)
 
     # created BeautifulSoup object
-    soup1 = runBeautifulSoup(searchListUrl)
+    soup1 = runBeautifulSoup(listURL)
+
+    totalListPages = findTotalRestaurantListPages(soup1)
 
     # get all 'info' (names, links(href), and numbers of reviews)
-    # (scrape the 'info' of the places in the list (30 featured places), then store them into a list
-    # the list (30 featured places) can be different, based on user input)
-    info = findSearchInfo(soup1)
+    # (scrape the 'info' of the places in the list, then store them into a list
+    # the list can be different, based on user input)
+    info = scrapRestaurantList(listURL, totalListPages)
 
     # Print all names and numbers of reviews for user to choose
     printNamesAndReviews(info)
@@ -219,7 +237,7 @@ def start():
     soup2 = runBeautifulSoup(thePlaceURL)
 
     # find Total pages of reviews
-    totalPages = findTotalPages(soup2)
+    totalPages = findTotalReviewPages(soup2)
 
     # scraping all reviews from all the pages (return a list of all reviews)
     allReviews = scrapeReviews(thePlaceURL, totalPages)
