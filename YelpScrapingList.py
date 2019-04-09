@@ -246,6 +246,8 @@ def start():
     printAllReviews(allReviews)
     #print(allReviews)
 
+    return (info, allReviews)
+
 # -------------------------------------------------------------------------------------
 # ------------------ Program starts here -------------------
-start()
+info, allReviews = start()

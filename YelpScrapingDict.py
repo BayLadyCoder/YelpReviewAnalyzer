@@ -212,7 +212,9 @@ def start():
     # # print all reviews
     printAllReviews(allReviews)
 
+    return allReviews
+
 
 # -------------------------------------------------------------------------------------
 # ------------------ Program starts here -------------------
-start()
+
