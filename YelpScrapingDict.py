@@ -7,22 +7,31 @@ from bs4 import BeautifulSoup
 # example = "https://www.yelp.com/search?find_desc=sushi&find_loc=baltimore"
 
 # Get user input
-def getUserInput():
-    userInput = {}
-    find = input('What kind of food you are looking for: ')
-    near = input('Location: ')
-    userInput['find'] = find
-    userInput['near'] = near
-    return userInput
+# def getUserInput():
+#     userInput = {}
+#     find = input('What kind of food you are looking for: ')
+#     near = input('Location: ')
+#     userInput['find'] = find
+#     userInput['near'] = near
+#     return userInput
+
 
 # find url from the user search input
-def searchListURL(userInput):
+# def searchListURL(userInput):
+#     Yelp = "https://www.yelp.com/search?find_desc="
+#     what = userInput['find'].replace(' ', '%20')
+#     where = '&find_loc=' + userInput['near'].replace(' ', '%20')
+#     searchURL = Yelp + what + where
+#     # print(searchURL)
+#     return searchURL
+
+def searchListURL(find, near):
     Yelp = "https://www.yelp.com/search?find_desc="
-    what = userInput['find'].replace(' ', '%20')
-    where = '&find_loc=' + userInput['near'].replace(' ', '%20')
+    what = find.replace(' ', '%20')
+    where = '&find_loc=' + near.replace(' ', '%20')
     searchURL = Yelp + what + where
-    # print(searchURL)
     return searchURL
+
 
 # get code and build BeautifulSoup object
 def runBeautifulSoup(url):
@@ -45,12 +54,23 @@ def findTotalRestaurantListPages(soup):
             
     return totalPages
 
+
+# for flask after get user input (find and near)
+def getListOfRestaurants(find, near):
+    url = searchListURL(find, near)
+    soup = runBeautifulSoup(url)
+    totalListPages = findTotalRestaurantListPages(soup)
+    data = scrapRestaurantList(url, totalListPages)
+    return data
+
+
 # Get a list of restaurants, their links(url), and numbers of reviews based on user searching input
 def scrapRestaurantList(link, totalListPages):
     page = 1
     startAt = 0
-    
-    allInfo = []
+    data = []
+    if totalListPages > 10:
+        totalListPages = 10
     # startAt = start at restaurant number(1,30,60,90) this is for the url
     while page <= totalListPages:
         if page == 1:
@@ -74,17 +94,17 @@ def scrapRestaurantList(link, totalListPages):
                     restaurant['review_counts'] = int(span.text[:-7])
             else:
                 restaurant['review_counts']  = 0
-            allInfo.append(restaurant)
+            data.append(restaurant)
 
         page += 1
 
-    return allInfo
+    return data
 
 # get a list of all restaurants' names, links, or review_counts
-def getListOf(allInfo, getThis):
+def getListOf(data, getThis):
     listAll = []
-    for restaurant in allInfo:
-        listAll.append(restaurant[getThis])
+    for i in range(len(data))[1:]:
+        listAll.append(data[i][getThis])
     return listAll
 
 # Print all names of the places and the numbers of reviews
@@ -107,10 +127,9 @@ def getTheLink(allInfo, index):
 # ---------------------------------------------------------------------------------------
 
 # ------- Get the Reviews Page (The Chosen Restaurant Page) ------- #
-def createThePlaceURL(link, userInput):
+def createThePlaceURL(link, find):
     # example = "https://www.yelp.com/biz/baltimore-built-bistro-b3-baltimore-3?start=1"
     Yelp = "https://www.yelp.com"
-    find = userInput['find']
     print("find = ", find)
     toBeRemoved = -(len(find)+5)
     print(toBeRemoved)

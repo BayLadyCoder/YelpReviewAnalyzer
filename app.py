@@ -20,7 +20,13 @@ def search_page():
 def search():
     find = request.form['find']
     near = request.form['near']
-    return render_template('searchAgain.html', find = find, near=near)
+    data = getListOfRestaurants(find, near)
+
+    nameList = getListOf(data, 'name')
+    reviewCountsList = getListOf(data, 'review_counts')
+    urlList = getListOf(data, 'link')
+
+    return render_template('searchAgain.html', find = find, near=near, names_reviews_list = zip(nameList,reviewCountsList, urlList))
 
 @app.route("/search-again")
 def searchAgain():

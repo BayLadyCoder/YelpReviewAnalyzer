@@ -4,12 +4,28 @@
 
 
 {% if find and near %}
-<h1>Find: {{find}}</h1>
-<h1>Near: {{near}}</h1>
+<h1 class="text-center">Find: {{find}}</h1>
+<h1 class="text-center">Near: {{near}}</h1>
 {% endif %}
+
+
+<ol class="row">
+        {% for name, reviews, url in names_reviews_list %}
+        <li class="col-12 row">
+            <a href="http://www.yelp.com{{url}}">{{name}}</a>
+            {% if reviews <= 1 %}
+            <div class="col-6">{{reviews}} review</div>
+        {% else %}
+            <div class="col-6">{{reviews}} reviews</div>
+        </li>
+        {% endif %}
+        {% endfor %}
+</ol>
+
 <div class="d-flex justify-content-center m-5 flex-column align-items-center">
-    <a href="/search" style="background-color:rgb(0, 164, 49); text-decoration: none; border-radius: 20px; padding: 15px; font-size: 25px; font-weight: bold; color: white; ">
-    I want to search again!
+    <a href="/search"
+        style="background-color:rgb(215, 255, 209); text-decoration: none; border-radius: 15px; padding: 15px; font-size: 25px; font-weight: bold; color: rgb(5, 140, 0); border: solid rgb(5, 140, 0) 2px ">
+        I want to search again!
     </a>
 
     <br>
