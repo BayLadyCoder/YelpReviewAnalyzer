@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 # searchURL = "https://www.yelp.com/search?find_desc=thai%20food&find_loc=owings%20mills"
 # example = "https://www.yelp.com/search?find_desc=sushi&find_loc=baltimore"
 
-# Get user input
+#Get user input
 # def getUserInput():
 #     userInput = {}
 #     find = input('What kind of food you are looking for: ')
@@ -178,6 +178,16 @@ def scrapeReviews(link, totalPages):
     return allReviews
 
 
+def outputToTextFile(reviewList):
+    fileName = "theReviews.txt"
+    file = open(fileName, 'w')
+    for review in reviewList:
+        file.write(review)
+        file.write('\n')
+
+    file.close()
+
+
 def printAllReviews(reviewsList):
     i = 1
     print(len(reviewsList))
@@ -228,12 +238,12 @@ def start():
     # # scraping all reviews from all the pages (return a list of all reviews)
     allReviews = scrapeReviews(thePlaceURL, totalPages)
 
-    # # print all reviews
-    printAllReviews(allReviews)
+    outputToTextFile(allReviews)
 
     return allReviews
 
 
 # -------------------------------------------------------------------------------------
 # ------------------ Program starts here -------------------
-
+allReviews = scrapeReviews("https://www.yelp.com/biz/fuji-yama-sushi-bar-reisterstown?start=1", 3)
+outputToTextFile(allReviews)
