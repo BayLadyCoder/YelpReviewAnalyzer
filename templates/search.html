@@ -7,18 +7,18 @@
     <li>{{ review }}</li>
     {% endfor %}
 </ol> -->
-<form method="POST" class="mt-4">
+<form method="POST" class="p-4" style="border: solid rgb(1, 171, 52) 2px; border-radius: 5px; padding: 50px 20px; width: 500px; background-color:  rgb(0, 164, 49);">
   <div class="form-group">
-    <label for="find">What kind of food you are looking for?</label>
+    <label for="find" style="color: white; font-size: 25px;">What kind of food you are looking for?</label>
     <input type="text" class="form-control" name="find" id="find" placeholder="Example: sushi, burgers, pizzas">
   </div>
     <div class="form-group">
 
-    <label for="near">Location?</label>
+    <label for="near" style="color: white; font-size: 25px;">Location?</label>
     <input type="text" class="form-control" name="near" id="near" placeholder="Example: Baltimore, Catonsville, Owings Mills">
   </div>
-  <button style="background:rgb(110, 12, 201); border-color: rgb(110, 12, 201)" type="submit" class="btn btn-primary mb-2">
-    <a href="/search-again" class="text-white">Search</a>
+  <button style="background:rgb(130, 27, 227); border-color: rgb(255, 255, 255); border-radius: 15px;  width: 25%;" type="submit" class="btn my-2">
+    <a href="/search-again" style="color:#fff; text-decoration: none; font-size: 20px; width: 100%; " class="">Search</a>
     
   </button>
 

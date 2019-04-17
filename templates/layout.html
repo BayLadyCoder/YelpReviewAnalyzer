@@ -14,7 +14,7 @@
     {% endif %}
 </head>
 
-<body></body>
+<body style="width: 100vw; height: 100vh;">
 <nav class="navbar navbar-light" style="background-color: #f2ecff;">
     <a class="navbar-brand text-bold" style="color:rgb(110, 12, 201)" href="/">YRA</a>
     <ul class="nav justify-content-end">
@@ -29,8 +29,8 @@
         </li>
     </ul>
 </nav>
-<div class="container">
-<h2 class="text-center pt-3"><a href="/" style="color:rgb(110, 12, 201); text-decoration: none">Yelp Review Analyzer!</a></h2>
+<div style="" class="d-flex justify-content-center flex-column align-items-center">
+<h2 class="text-center py-3"><a href="/" style="color:rgb(110, 12, 201); text-decoration: none">Yelp Review Analyzer!</a></h2>
 
     {% block content %}
     {% endblock %}
