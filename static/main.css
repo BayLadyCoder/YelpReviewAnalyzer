@@ -1,0 +1,49 @@
+body {
+   background-color:#fff;
+}
+
+nav a, #navBrand, #headerText {
+    color: rgb(110, 12, 201);
+}
+
+#readyToSearchBtn {
+     background-color:rgb(0, 164, 49); 
+     text-decoration: none; 
+     border-radius: 20px; 
+     padding: 15px; 
+     font-size: 25px; 
+     font-weight: bold; 
+     color: white; 
+}
+
+
+#searchForm {
+    border: solid rgb(1, 171, 52) 2px; 
+    border-radius: 5px; 
+    padding: 50px 20px; 
+    width: 500px; 
+    background-color:  rgb(0, 164, 49);
+}
+
+label {
+    color: #fff;
+    font-size: 25px;
+}
+
+#searchBtn {
+    background:rgb(130, 27, 227); 
+    border-color: rgb(255, 255, 255); 
+    border-radius: 15px;  
+    width: 25%;
+}
+
+button a {
+    color:#fff; 
+    text-decoration: none; 
+    font-size: 20px; 
+    width: 100%;
+}
+
+#goHomeBtn {
+     color:rgb(110, 12, 201)
+}
