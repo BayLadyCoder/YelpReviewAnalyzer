@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<form method="POST" id="searchForm" action="">
+   {{ form.hidden_tag() }}
+  <div class="form-group">
+      {{ form.find.label(class="form-control-label") }}
+
+        {% if form.find.errors %}
+            {{ form.find(class="form-control is-invalid", placeholder="Ex. sushi, burgers, pizzas") }}
+            <div class="invalid-feedback">* Required (at least 2 charactors long) *</div>
+        {% else %}
+             {{ form.find(class="form-control", placeholder="Ex. sushi, burgers, pizzas") }}
+        {% endif %}
+    </div>
+ 
+  <div class="form-group">
+      {{ form.near.label(class="form-control-label") }}
+        {% if form.near.errors %}
+            {{ form.near(class="form-control is-invalid", placeholder="Ex. Baltimore, Catonsville, Owings Mills") }}
+            <div class="invalid-feedback">* Required (at least 2 charactors long) *</div>
+        {% else %}
+             {{ form.near(class="form-control", placeholder="Ex. Baltimore, Catonsville, Owings Mills") }}
+        {% endif %}
+
+  </div>
+  {{ form.submit(class="btn my-2", id="searchBtn", type="submit") }}
+
+</form>
+
+
+
+{% endblock %}
