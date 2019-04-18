@@ -1,17 +1,17 @@
 from flask import Flask, render_template, request, url_for, redirect, flash
 from YelpScrapingDict import *
+from flask_sqlalchemy import SQLAlchemy
 from forms import SearchForm
 
 
 app = Flask(__name__)
-
-
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
 
 
-
-@app.route("/", methods=['GET','POST'])
-@app.route("/home", methods=['GET','POST'])
+@app.route("/", methods=['GET', 'POST'])
+@app.route("/home", methods=['GET', 'POST'])
 def searchList():
 
     form = SearchForm()
@@ -43,9 +43,11 @@ def searchAgain():
 def about():
     return render_template('about.html', title="About")
 
+
 @app.route("/contact")
 def contact():
     return render_template('contact.html', title="Contact")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
