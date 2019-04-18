@@ -245,5 +245,5 @@ def start():
 
 # -------------------------------------------------------------------------------------
 # ------------------ Program starts here -------------------
-allReviews = scrapeReviews("https://www.yelp.com/biz/fuji-yama-sushi-bar-reisterstown?start=1", 3)
-outputToTextFile(allReviews)
+# allReviews = scrapeReviews("https://www.yelp.com/biz/fuji-yama-sushi-bar-reisterstown?start=1", 3)
+# outputToTextFile(allReviews)

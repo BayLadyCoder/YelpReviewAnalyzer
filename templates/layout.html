@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Lobster|Quicksand" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Crete+Round|Lobster|Quicksand" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lobster|Overpass|Quicksand" rel="stylesheet">
+
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
@@ -16,23 +21,23 @@
     {% endif %}
 </head>
 
-<body style="width: 100vw; height: 100vh;">
-<nav class="navbar navbar-light" style="background-color: #f2ecff;">
-    <a class="navbar-brand text-bold" id="navBrand" href="/">YRA</a>
+<body>
+<nav class="navbar">
+    <a class="navbar-brand text-bold" id="navBrand" href="/">YelpRA</a>
     <ul class="nav justify-content-end">
         <li class="nav-item">
-            <a class="nav-link text-purple" href="/">Home</a>
+            <a class="nav-link" href="/">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-purple" href="/about">About</a>
+            <a class="nav-link" href="/about">About</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-purple" style="color:rgb(110, 12, 201)" href="/contact">Contact</a>
+            <a class="nav-link" href="/contact">Contact</a>
         </li>
     </ul>
 </nav>
-<div style="" class="d-flex justify-content-center flex-column align-items-center">
-<h1 class="text-center py-3"><a href="/" id="headerText" text-decoration: none">Yelp Review Analyzer!</a></h2>
+<div id="heroContainer" class="d-flex flex-column align-items-center">
+<h1 class="text-center pt-4 pb-3"><a href="/" id="headerText" text-decoration: none">Yelp Review Analyzer!</a></h2>
 
     {% block content %}
     {% endblock %}

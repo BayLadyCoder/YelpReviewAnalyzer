@@ -7,23 +7,24 @@
     <li>{{ review }}</li>
     {% endfor %}
 </ol> -->
-<form method="POST" id="searchForm" class="p-4">
+<form method="POST" id="searchForm">
   <div class="form-group">
-    <label for="find">What kind of food you are looking for?</label>
-    <input type="text" class="form-control" name="find" id="find" placeholder="Example: sushi, burgers, pizzas">
-  </div>
-    <div class="form-group">
-
-    <label for="near">Location?</label>
-    <input type="text" class="form-control" name="near" id="near" placeholder="Example: Baltimore, Catonsville, Owings Mills">
+      <label for="find">What kind of food are you looking for?</label>
+      <input type="text" class="form-control" name="find"  id="find" placeholder="Ex. sushi, burgers, pizzas" required>
+      <div class="invalid-feedback">* Required *</div>
+    </div>
+ 
+  <div class="form-group">
+      <label for="near">Location?</label>
+      <input type="text" class="form-control" name="near" id="near" placeholder="Ex. Baltimore, Catonsville, Owings Mills" required>
+      <div class="invalid-feedback">* Required *</div>  
   </div>
   <button type="submit" id="searchBtn" class="btn my-2">
-    <a href="/search-again" class="">Search</a>
-    
+    <!-- <a href="/search-again" class="text-center">Search</a> --> Search
   </button>
 
 </form>
-</form>
+
 
 
 {% endblock %}
