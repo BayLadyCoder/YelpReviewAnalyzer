@@ -1,13 +1,11 @@
 from flask import Flask, render_template, request, url_for, redirect, flash
 from YelpScrapingDict import *
-from flask_sqlalchemy import SQLAlchemy
 from forms import SearchForm
-
+from jsonToPy import orders
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
+
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -42,6 +40,12 @@ def searchAgain():
 @app.route("/about")
 def about():
     return render_template('about.html', title="About")
+
+
+@app.route("/api/orders", methods=['GET', 'POST'])
+def api():
+
+    return render_template('api.html', title="API", orders=orders)
 
 
 @app.route("/contact")

@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1 class="text-center pt-3">API</h1>
+
+<div class="container bg-primary">
+    <ul id="orders">
+       {% for order in orders %}
+            <li>Name: {{order.name}}, Drink: {{order.drink}} </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}
