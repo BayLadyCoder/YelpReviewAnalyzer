@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+import json
 
 # ------- Home Page ------- #
 # searchURL = "https://www.yelp.com/search?find_desc=thai%20food&find_loc=owings%20mills"
@@ -55,50 +55,53 @@ def findTotalRestaurantListPages(soup):
     return totalPages
 
 
-# for flask after get user input (find and near)
-def getListOfRestaurants(find, near):
-    url = searchListURL(find, near)
-    soup = runBeautifulSoup(url)
-    totalListPages = findTotalRestaurantListPages(soup)
-    data = scrapRestaurantList(url, totalListPages)
-    return data
-
-
 # Get a list of restaurants, their links(url), and numbers of reviews based on user searching input
 def scrapRestaurantList(link, totalListPages):
     page = 1
     startAt = 0
     data = []
-    if totalListPages > 10:
-        totalListPages = 10
+    # if totalListPages > 2:
+    #     totalListPages = 2
     # startAt = start at restaurant number(1,30,60,90) this is for the url
-    while page <= totalListPages:
-        if page == 1:
-            url = link
-        elif page > 1:
-            startAt = (page-1)*30
-            strStartAt = str(startAt)
-            url = link+strStartAt
-        pageOfPages = "(Page " + str(page) + " of " + str(totalListPages) + ")"
-        print(url, pageOfPages)
-        soup2 = runBeautifulSoup(url)
+    # while page <= totalListPages:
+    #     if page == 1:
+    #         url = link
+    #     elif page > 1:
+    #         startAt = (page-1)*30
+    #         strStartAt = str(startAt)
+    #         url = link+strStartAt
+    #     pageOfPages = "(Page " + str(page) + " of " + str(totalListPages) + ")"
+    #     print(url, pageOfPages)
+    url = link
+    print(url)
+    soup2 = runBeautifulSoup(url)
 
-        for div in soup2.find_all('div', class_="mainAttributes__373c0__1r0QA"):
-            restaurant = {}
-            for h3 in div.findChildren('h3', class_="alternate__373c0__1uacp"):
-                for a in h3.findChildren('a'):
-                    restaurant['name'] = a.text
-                    restaurant['link'] = a.get('href')
-            if(div.findChildren('span', class_="reviewCount__373c0__2r4xT")):
-                for span in div.findChildren('span', class_="reviewCount__373c0__2r4xT"):
-                    restaurant['review_counts'] = int(span.text[:-7])
-            else:
-                restaurant['review_counts']  = 0
-            data.append(restaurant)
+    for div in soup2.find_all('div', class_="mainAttributes__373c0__1r0QA"):
+        restaurant = {}
+        for h3 in div.findChildren('h3', class_="alternate__373c0__1uacp"):
+            for a in h3.findChildren('a'):
+                restaurant['name'] = a.text
+                restaurant['link'] = a.get('href')
+        if(div.findChildren('span', class_="reviewCount__373c0__2r4xT")):
+            for span in div.findChildren('span', class_="reviewCount__373c0__2r4xT"):
+                restaurant['review_counts'] = int(span.text[:-7])
+        else:
+            restaurant['review_counts']  = 0
+        data.append(restaurant)
 
-        page += 1
+    page += 1
 
     return data
+
+
+# for flask after get user input (find and near)
+def getListOfRestaurants(find, near):
+    url = searchListURL(find, near)
+    soup = runBeautifulSoup(url)
+    totalListPages = findTotalRestaurantListPages(soup)
+    data = scrapRestaurantList(url, 1)
+    return data
+
 
 # get a list of all restaurants' names, links, or review_counts
 def getListOf(data, getThis):
@@ -195,6 +198,12 @@ def printAllReviews(reviewsList):
         print(i, '\n', review, '\n')
         i+=1
 
+def pythonToJSON(listOfDict):
+    with  open('new_list.json', 'w') as f:
+        json.dump(listOfDict, f)
+
+
+
 def start():
     # Get user input
     userInput = getUserInput()
@@ -247,3 +256,4 @@ def start():
 # ------------------ Program starts here -------------------
 # allReviews = scrapeReviews("https://www.yelp.com/biz/fuji-yama-sushi-bar-reisterstown?start=1", 3)
 # outputToTextFile(allReviews)
+# pythonToJSON(allReviews)

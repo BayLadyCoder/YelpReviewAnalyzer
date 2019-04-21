@@ -7,8 +7,13 @@ body {
     background-image: linear-gradient(rgba(9, 9, 9, 0.5), rgba(31, 31, 31, 0.5)),
         url("img/bg.jpg");
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     background-size: cover;
+}
+
+.main-content {
+    background: #000000;
+
 }
 
 #heroContainer {
@@ -112,5 +117,61 @@ input[type="text"] {
 }
 
 #goHomeBtn {
-    color: rgb(110, 12, 201);
+    color: rgb(254, 163, 6);
+
+}
+
+.find-near {
+    color: rgb(87, 222, 242);
+    color: rgb(0, 0, 0);
+    color: rgb(255, 115, 137);
+    color: rgb(80, 198, 255);
+    width: 100%;
+    background-color: rgb(46, 46, 46);
+    background-color: rgb(255, 115, 227);
+    background: #000;
+    font-weight: bold;
+
+}
+
+.find-near p {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 16px;
+    margin: 0;
+}
+
+.nameList{
+    font-size: 15px;
+    text-decoration: none;
+    color: rgb(254, 106, 206);
+}
+
+.reviewList {
+    color: rgb(241, 199, 255);
+    color: rgb(254, 106, 206);
+    font-size: 11px;  
+}
+
+ul {
+    list-style: none;
+}
+
+ul>li:nth-child(even) span {
+   color: rgb(29, 98, 245);
+    color: rgb(254, 193, 235);
+}​
+
+#search-again-button {
+    background-color:rgb(41, 41, 41); 
+    text-decoration: none; 
+    border-radius: 5px; 
+    padding: 8px; 
+    font-size: 15px; 
+    font-weight: bold; 
+    color: rgb(87, 222, 242) !important;
+    border: solid rgb(87, 222, 242) 2px !important;
+}
+
+.nav-link {
+    padding: .4rem .7rem;
 }
