@@ -13,9 +13,9 @@
 
 <ul class="row px-4 pt-1">
     {% for name, reviews, url in names_reviews_list %}
-    <li class="col-12 text-white">
-            <a class="d-flex justify-content-between" href="http://www.yelp.com{{url}}">
-                <span class="nameList">{{name}}</span>
+    <li class="col-12 text-white list d-flex justify-content-between">
+            <a class="list d-flex justify-content-between" href="/reviews" data-link="{{url}}" onclick="sendLink(this)">
+                <span class="nameList" id="theName">{{name}}</span>
                 <span class="reviewList">
                     {% if reviews <= 1 %}
                         {{reviews}} review

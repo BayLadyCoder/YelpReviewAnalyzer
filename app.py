@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, flash
+from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, make_response
 from YelpScrapingDict import *
 from forms import SearchForm
 from jsonToPy import orders
@@ -6,6 +6,7 @@ from jsonToPy import orders
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
 
+theLink = []
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/home", methods=['GET', 'POST'])
@@ -27,9 +28,22 @@ def searchList():
     return render_template('index.html', title='Home', form=form)
 
 
-@app.route("/restaurant-list")
-def searchAgain():
-    return render_template('showList.html', title="Search Again")
+
+@app.route("/reviews", methods=['POST', 'GET'])
+def reviews():
+
+    if request.method == 'POST':
+        req = request.get_json()
+        theLink.clear()
+        theLink.append(req['link'])
+
+        print("data is: (POST)", req)  
+        print("link is: (POST)", theLink)  
+        return theLink
+
+    else:    
+        print('link is: ', theLink)
+        return render_template('reviews.html', title="Reviews", theLink = theLink )
 
 
 @app.route("/about")

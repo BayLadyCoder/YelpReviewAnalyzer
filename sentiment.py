@@ -21,7 +21,6 @@ print('Translate to Arabic:', blob.translate(to='ar'))
 print('Translate to Chinese:', blob.translate(to='zh-CN'))
 
 
-
 count = 0
 posScores = 0
 negScores = 0

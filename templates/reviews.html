@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1 class="text-center pt-3">Reviews</h1>
+
+<div class="container bg-primary">
+    <ul>
+        {% for link in theLink %}
+       <li>{{link}}</li>
+       {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}
