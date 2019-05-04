@@ -203,6 +203,13 @@ def pythonToJSON(listOfDict):
         json.dump(listOfDict, f)
 
 
+def scrapReviewBundle(link, find):
+    url = createThePlaceURL(link, find)
+    soup = runBeautifulSoup(url)
+    pages = findTotalReviewPages(soup)
+    reviews = scrapeReviews(url, pages)
+
+
 
 def start():
     # Get user input

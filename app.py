@@ -6,7 +6,11 @@ from jsonToPy import orders
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
 
-theLink = []
+userInput = {}
+
+# 1. store "find" variable global because need to use it again for 
+# for function createThePlaceURL
+# for scraping reviews to analyze
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/home", methods=['GET', 'POST'])
@@ -15,6 +19,7 @@ def searchList():
     form = SearchForm(request.form)
     if form.validate_on_submit():
         find = form.find.data
+        userInput['find'] = find
         near = form.near.data
         data = getListOfRestaurants(find, near)
 
@@ -34,16 +39,18 @@ def reviews():
 
     if request.method == 'POST':
         req = request.get_json()
-        theLink.clear()
-        theLink.append(req['link'])
+        link = req['link']
+        # theLink.clear()
+        # theLink.append(req['link'])
+        userInput['link'] = link
 
-        print("data is: (POST)", req)  
-        print("link is: (POST)", theLink)  
-        return theLink
+        # print("data is: (POST)", req)  
+        print("link is: (POST)", userInput)  
+      
 
     else:    
-        print('link is: ', theLink)
-        return render_template('reviews.html', title="Reviews", theLink = theLink )
+        print('link is: (GET)', userInput['link'])
+        return render_template('reviews.html', title="Reviews", theLink = userInput )
 
 
 @app.route("/about")
