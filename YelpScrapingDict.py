@@ -208,7 +208,7 @@ def scrapReviewBundle(link, find):
     soup = runBeautifulSoup(url)
     pages = findTotalReviewPages(soup)
     reviews = scrapeReviews(url, pages)
-
+    return reviews
 
 
 def start():

@@ -7,6 +7,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
 
 userInput = {}
+reviews = []
 
 # 1. store "find" variable global because need to use it again for 
 # for function createThePlaceURL
@@ -40,17 +41,16 @@ def reviews():
     if request.method == 'POST':
         req = request.get_json()
         link = req['link']
-        # theLink.clear()
-        # theLink.append(req['link'])
         userInput['link'] = link
-
-        # print("data is: (POST)", req)  
-        print("link is: (POST)", userInput)  
-      
+        find = userInput['find']
+        reviews = scrapReviewBundle(link, find)
+        # print(reviews)
+        return reviews
 
     else:    
         print('link is: (GET)', userInput['link'])
-        return render_template('reviews.html', title="Reviews", theLink = userInput )
+        print('link is: (GET)', userInput)
+    return render_template('reviews.html', title="Reviews", theLink = userInput, reviews=reviews)
 
 
 @app.route("/about")
