@@ -21,43 +21,53 @@ print('Translate to Arabic:', blob.translate(to='ar'))
 print('Translate to Chinese:', blob.translate(to='zh-CN'))
 
 
-count = 0
-posScores = 0
-negScores = 0
-with open('theReviews.txt', 'r') as f:
-    for line in f.read().split('\n'):
-        reviewBlob = TextBlob(line)
-        # print('Translate to Thai:', reviewBlob.translate(to='th'))
+
+def analyzeReviews(reviewList):
+    count = 0
+    sentimentScores = 0
+    analyzedData = {}
+    popularScores = 0
+    for review in reviewList:
+        reviewBlob = TextBlob(review)
         score = reviewBlob.sentiment.polarity
-        if score > 0.5:
-            posScores += 1
-        elif score > 0:
-            posScores += 0.5
-        elif score > 0.5:
-            negScores -= 0.5
-        else:
-            negScores -= 1
+        
+    
+        if score > 0:
+            popularScores += 1
+        elif score < 0:
+            popularScores -=1
+        
         count+=1
-    finalScore = ((posScores+negScores/count)/count)*100
-    print(finalScore, '%')
+        sentimentScores+=score
 
-    if finalScore > 90:
-        print('This restaurant is exellent')
-    elif finalScore > 80:
-        print('This restaurant is very good')
-    elif finalScore > 70:
-        print('This restaurant is decent')
-    elif finalScore > 60:
-        print('This restaurant is good')
-    elif finalScore > 50:
-        print('This restaurant is so So')
-    elif finalScore > 40:
-        print('This restaurant is not so good')
-    elif finalScore > 30:
-        print('This restaurant is bad')
-    elif finalScore > 20:
-        print('This restaurant is very bad')
+        print('*******************************************')
+        # print(review,'score', score, 'positive: ', posScores, 'negative', negScores)
+        print(review,'score', score)
+        print('*******************************************')
+        
+    finalPopularScore = (popularScores/count)*100
+    finalSentimentScore = ((sentimentScores/count))*100
+    analyzedData['sentiment'] = finalSentimentScore
+    analyzedData['popular'] = finalPopularScore
+    print('sentiment score:', finalSentimentScore, '%')
+    print('test score:', finalPopularScore, '%')
+
+
+    if finalSentimentScore > 30:
+        analyzedData['summary'] = 'This restaurant is exellent'
+    elif finalSentimentScore > 25:
+        analyzedData['summary'] = 'This restaurant is very good'
+    elif finalSentimentScore > 20:
+        analyzedData['summary'] = 'This restaurant is decent'
+    elif finalSentimentScore > 15:
+        analyzedData['summary'] = 'This restaurant is good'
+    elif finalSentimentScore > 10:
+        analyzedData['summary'] = 'This restaurant is okay'
+    elif finalSentimentScore > 5:
+        analyzedData['summary'] = 'This restaurant is so so'
+    elif finalSentimentScore > 0:
+        analyzedData['summary'] = 'This restaurant is not so good'
     else:
-        print("Don't go to this restaurant")
+        analyzedData['summary'] = "Don't go to this restaurant"
 
-
+    return analyzedData

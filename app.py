@@ -2,16 +2,13 @@ from flask import Flask, render_template, request, url_for, redirect, flash, jso
 from YelpScrapingDict import *
 from forms import SearchForm
 from jsonToPy import orders
+from sentiment import analyzeReviews
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
 
 userInput = {}
 reviews = []
-
-# 1. store "find" variable global because need to use it again for 
-# for function createThePlaceURL
-# for scraping reviews to analyze
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/home", methods=['GET', 'POST'])
@@ -35,32 +32,20 @@ def searchList():
 
 
 
-@app.route("/reviews", methods=['POST', 'GET'])
-def reviews():
-
-    if request.method == 'POST':
-        req = request.get_json()
-        link = req['link']
-        userInput['link'] = link
-        find = userInput['find']
-        reviews = scrapReviewBundle(link, find)
-        # print(reviews)
-        return reviews
-
-    else:    
-        print('link is: (GET)', userInput['link'])
-        print('link is: (GET)', userInput)
-    return render_template('reviews.html', title="Reviews", theLink = userInput, reviews=reviews)
-
+@app.route("/reviews", methods=['GET'])
+def scrapReviews():
+    req = request.args.get('url')
+    name = request.args.get('name')
+    find = userInput['find']
+    reviews = scrapReviewBundle(req, find)
+    analyzedData = analyzeReviews(reviews)
+    print(analyzedData)
+    return render_template('reviews.html', title="Reviews", theLink = userInput, reviews=reviews, data=analyzedData, name=name)
+    
 
 @app.route("/about")
 def about():
     return render_template('about.html', title="About")
-
-
-@app.route("/api/orders", methods=['GET', 'POST'])
-def api():
-    return render_template('api.html', title="API", orders=orders)
 
 
 @app.route("/contact")

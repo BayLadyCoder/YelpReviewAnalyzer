@@ -4,12 +4,15 @@
 <h1 class="text-center pt-3">Reviews</h1>
 
 <div class="container bg-primary">
-    <ul>
-        <!-- {% for link in theLink %} -->
-       <li>{{theLink.link}}</li>
-       <li>{{theLink.find}}</li>
-       <!-- {% endfor %} -->
-    </ul>
+    <h1 class="text-center">{{name}}</h1>
+    <h2>Sentiment: {{data.sentiment}}</h2>
+    <h2>Popularity: {{data.popular}}</h2>
+    <h3 class="text-center">{{data.summary}}</h3>
+    <ol>
+        {% for review in reviews %}
+            <li>{{review}}</li>
+        {% endfor %}
+    </ol>
 </div>
 
 
