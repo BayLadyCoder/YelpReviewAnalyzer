@@ -4,11 +4,7 @@
 }
 
 body {
-    background-image: linear-gradient(rgba(9, 9, 9, 0.5), rgba(31, 31, 31, 0.5)),
-        url("img/bg.jpg");
-    background-position: center;
-    background-repeat: repeat;
-    background-size: cover;
+    background-color: #000000;
 }
 
 .main-content {
@@ -179,29 +175,12 @@ ul>li:nth-child(even) span {
     padding: .4rem .7rem;
 }
 
-
-.sentimentContainer {
-    background-color: #fff;
-    padding: 20px 0px;
-}
-
-.reviewContainer {
-    background-color: #fcf0c0;
-}
-
-.reviewContainer h1 {
-    margin-bottom: 10px;
-}
-
-.bg-white {
-    background-color: #fff;
-    padding: 0 30px 20px 30px;
-}
-
-#BayImg {
-    width: 150px;
-    border-radius: 50%;
-}
+/* #resName {
+    font-size: 25px;
+    color: rgb(247, 95, 252);
+    font-family: "Lobster", cursive;
+    font-family: 'Ubuntu', sans-serif;
+} */
 
 @media only screen and (min-width: 600px) {
     #navBrand {
@@ -323,5 +302,12 @@ ul>li:nth-child(even) span {
     ul>li:hover {
         background-color: rgb(73, 73, 73);
 
+    }
+
+    #resName {
+        font-size: 45px;
+        color: rgb(247, 95, 252);
+        font-family: "Lobster", cursive;
+        font-family: 'Ubuntu', sans-serif;
     }
 }

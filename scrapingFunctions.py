@@ -7,24 +7,25 @@ import json
 # example = "https://www.yelp.com/search?find_desc=sushi&find_loc=baltimore"
 
 #Get user input
-# def getUserInput():
-#     userInput = {}
-#     find = input('What kind of food you are looking for: ')
-#     near = input('Location: ')
-#     userInput['find'] = find
-#     userInput['near'] = near
-#     return userInput
+def TESTgetUserInput():
+    userInput = {}
+    find = input('What kind of food you are looking for: ')
+    near = input('Location: ')
+    userInput['find'] = find
+    userInput['near'] = near
+    return userInput
 
 
 # find url from the user search input
-# def searchListURL(userInput):
-#     Yelp = "https://www.yelp.com/search?find_desc="
-#     what = userInput['find'].replace(' ', '%20')
-#     where = '&find_loc=' + userInput['near'].replace(' ', '%20')
-#     searchURL = Yelp + what + where
-#     # print(searchURL)
-#     return searchURL
+def TESTsearchListURL(userInput):
+    Yelp = "https://www.yelp.com/search?find_desc="
+    what = userInput['find'].replace(' ', '%20')
+    where = '&find_loc=' + userInput['near'].replace(' ', '%20')
+    searchURL = Yelp + what + where
+    # print(searchURL)
+    return searchURL
 
+# find url that have list of restaurants from the user search input
 def searchListURL(find, near):
     Yelp = "https://www.yelp.com/search?find_desc="
     what = find.replace(' ', '%20')
@@ -60,6 +61,9 @@ def scrapRestaurantList(link, totalListPages):
     page = 1
     startAt = 0
     data = []
+    # I commented out this below code because I only want to print list from the first page only
+    # Otherwise it will take too much time and too many options for user (for now)
+
     # if totalListPages > 2:
     #     totalListPages = 2
     # startAt = start at restaurant number(1,30,60,90) this is for the url
@@ -94,7 +98,7 @@ def scrapRestaurantList(link, totalListPages):
     return data
 
 
-# for flask after get user input (find and near)
+# bundle functions for Flask after get user input (find and near)
 def getListOfRestaurants(find, near):
     url = searchListURL(find, near)
     soup = runBeautifulSoup(url)
@@ -112,7 +116,7 @@ def getListOf(data, getThis):
 
 # Print all names of the places and the numbers of reviews
 # with their index number for the user to choose
-def printNamesAndReviews(listNames, listReviews):
+def TESTprintNamesAndReviews(listNames, listReviews):
     index = 1
     for name, reviews in zip(listNames, listReviews):
         if reviews <= 1:
@@ -122,14 +126,14 @@ def printNamesAndReviews(listNames, listReviews):
         index+=1  
 
 # get a specific link (when user choose a restaurant)
-def getTheLink(allInfo, index):
+def TESTgetTheLink(allInfo, index):
     index = index -1
     print(allInfo[index]['link'])
     return allInfo[index]['link'] 
 
 # ---------------------------------------------------------------------------------------
 
-# ------- Get the Reviews Page (The Chosen Restaurant Page) ------- #
+# ------- Create URL of the Reviews Page (The Chosen Restaurant Page) ------- #
 def createThePlaceURL(link, find):
     # example = "https://www.yelp.com/biz/baltimore-built-bistro-b3-baltimore-3?start=1"
     Yelp = "https://www.yelp.com"
@@ -143,7 +147,7 @@ def createThePlaceURL(link, find):
     print(url)
     return url
 
-# find total pages (reviews)
+# find total (reviews) pages to scrape all reviews 
 def findTotalReviewPages(soup):
     totalPages = ''
     for div in soup.find_all('div', class_="page-of-pages"):
@@ -181,7 +185,7 @@ def scrapeReviews(link, totalPages):
     return allReviews
 
 
-def outputToTextFile(reviewList):
+def TESToutputToTextFile(reviewList):
     fileName = "theReviews.txt"
     file = open(fileName, 'w')
     for review in reviewList:
@@ -191,16 +195,17 @@ def outputToTextFile(reviewList):
     file.close()
 
 
-def printAllReviews(reviewsList):
+def TESTprintAllReviews(reviewsList):
     i = 1
     print(len(reviewsList))
     for review in reviewsList:
         print(i, '\n', review, '\n')
         i+=1
 
-def pythonToJSON(listOfDict):
-    with  open('new_list.json', 'w') as f:
-        json.dump(listOfDict, f)
+# create JSON file from Python Dictionary ()
+# def pythonToJSON(listOfDict):
+#     with  open('new_list.json', 'w') as f:
+#         json.dump(listOfDict, f)
 
 
 def scrapReviewBundle(link, find):
@@ -211,12 +216,16 @@ def scrapReviewBundle(link, find):
     return reviews
 
 
-def start():
+
+# This was for testing all the functions before I started Flask
+# It doesn't work anymore since I changed some code inside many functions
+# to make it work for Flask
+def TESTstart():
     # Get user input
-    userInput = getUserInput()
+    userInput = TESTgetUserInput()
 
     # Get search URL (List of restaurants/Places Page)
-    listURL = searchListURL(userInput)
+    listURL = TESTsearchListURL(userInput)
 
     # created BeautifulSoup object
     soup1 = runBeautifulSoup(listURL)
@@ -261,6 +270,7 @@ def start():
 
 # -------------------------------------------------------------------------------------
 # ------------------ Program starts here -------------------
+# TESTING
 # allReviews = scrapeReviews("https://www.yelp.com/biz/fuji-yama-sushi-bar-reisterstown?start=1", 3)
 # outputToTextFile(allReviews)
 # pythonToJSON(allReviews)

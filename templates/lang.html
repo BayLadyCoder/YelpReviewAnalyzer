@@ -4,12 +4,11 @@
 
 
 <div class="container sentimentContainer d-flex flex-column justify-content-center align-items-center">
-    <h1 class="text-center">{{name}}</h1>
+    <h1 class="text-center">{{theInput.name}}</h1>
     <img src="/static/img/{{data.img}}" width="200px" height="200px" alt="">
-    
+    <h2>Sentiment: {{data.sentiment}}</h2>
+    <h2>Popularity: {{data.popular}}</h2>
     <h3 class="">{{data.summary}}</h3>
-    <h2>Sentiment: {{data.sentiment}} (average ~10-20)</h2>
-    <h2>Popularity: {{data.popular}}%</h2>
     <a href="/bubble" target="_blank" style="color:red">See Bubble Chart</a>
 </div>
 <div class="reviewContainer container">

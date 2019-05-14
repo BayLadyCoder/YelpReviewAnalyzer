@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster|Quicksand" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Crete+Round|Lobster|Quicksand" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lobster|Overpass|Quicksand" rel="stylesheet">
-   <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 
 
 
@@ -35,9 +35,6 @@
                 <a class="nav-link" href="/about">About</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/api/orders">API</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="/contact">Contact</a>
             </li>
         </ul>
@@ -61,7 +58,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
     <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+    {% block javascript %}
+    {% endblock %}
 </body>
 
 </html>
