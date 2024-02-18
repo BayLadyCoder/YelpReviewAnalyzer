@@ -57,10 +57,11 @@ def findTotalRestaurantListPages(soup):
 
 
 # Get a list of restaurants, their links(url), and numbers of reviews based on user searching input
-def scrapRestaurantList(link, totalListPages):
+def scrapRestaurantList(link, totalListPages = 1):
     page = 1
     startAt = 0
     data = []
+    restaurants = {};
     # I commented out this below code because I only want to print list from the first page only
     # Otherwise it will take too much time and too many options for user (for now)
 
@@ -77,41 +78,57 @@ def scrapRestaurantList(link, totalListPages):
     #     pageOfPages = "(Page " + str(page) + " of " + str(totalListPages) + ")"
     #     print(url, pageOfPages)
     url = link
-    print(url)
+    print(f"restaurant list url: {url}")
     soup2 = runBeautifulSoup(url)
 
-    for div in soup2.find_all('div', class_="mainAttributes__373c0__1r0QA"):
-        restaurant = {}
-        for h3 in div.findChildren('h3', class_="alternate__373c0__1uacp"):
-            for a in h3.findChildren('a'):
-                restaurant['name'] = a.text
-                restaurant['link'] = a.get('href')
-        if(div.findChildren('span', class_="reviewCount__373c0__2r4xT")):
-            for span in div.findChildren('span', class_="reviewCount__373c0__2r4xT"):
-                restaurant['review_counts'] = int(span.text[:-7])
-        else:
-            restaurant['review_counts']  = 0
-        data.append(restaurant)
+    for div in soup2.find_all('div', class_="css-1qn0b6x"):
+        span = div.select_one(".css-chan6m")
+        h3 = div.select_one("h3.css-1agk4wl")
+   
+        if h3 == None or span == None:
+            continue
+    
+        a = h3.find('a',{'class':'css-19v1rkv'})
 
+        restaurant = {"name": a.text, "link": a.get('href')}
+        
+        if restaurant.get('name') != "" and restaurant.get('link') != "" and span.text != '--:--':
+            totalReviews = span.text.split(' ')[0][1:]
+            if totalReviews[-1] == 'k': 
+                totalReviews = float(totalReviews[:-1]) * 1000;
+            else:    
+                totalReviews = int(totalReviews)
+            restaurant['review_counts'] = totalReviews
+            restaurants[restaurant.get('name')] = restaurant;
+        
     page += 1
+
+    for attr, value in restaurants.items():
+        data.append(value)
+
 
     return data
 
 
 # bundle functions for Flask after get user input (find and near)
 def getListOfRestaurants(find, near):
-    url = searchListURL(find, near)
-    soup = runBeautifulSoup(url)
-    totalListPages = findTotalRestaurantListPages(soup)
-    data = scrapRestaurantList(url, 1)
+    # url = searchListURL(find, near)
+    url = 'http://127.0.0.1:5500/index.html'
+
+    # soup = runBeautifulSoup(url)
+    # totalListPages = findTotalRestaurantListPages(soup)
+    # data = scrapRestaurantList(url, totalListPages)
+
+    data = scrapRestaurantList(url)
+
     return data
 
 
 # get a list of all restaurants' names, links, or review_counts
-def getListOf(data, getThis):
+def getListOf(data, key):
     listAll = []
-    for i in range(len(data))[1:]:
-        listAll.append(data[i][getThis])
+    for restaurant in data:
+        listAll.append(restaurant[key])
     return listAll
 
 # Print all names of the places and the numbers of reviews
@@ -137,29 +154,25 @@ def TESTgetTheLink(allInfo, index):
 def createThePlaceURL(link, find):
     # example = "https://www.yelp.com/biz/baltimore-built-bistro-b3-baltimore-3?start=1"
     Yelp = "https://www.yelp.com"
-    print("find = ", find)
-    toBeRemoved = -(len(find)+5)
-    print(toBeRemoved)
-    print(link)
-    link = link[:toBeRemoved]
     start1 = "?start=1"
-    url = Yelp+link+start1
-    print(url)
-    return url
+    # url = Yelp+link+start1
+    # return url
+    return Yelp+link
 
 # find total (reviews) pages to scrape all reviews 
 def findTotalReviewPages(soup):
     totalPages = ''
-    for div in soup.find_all('div', class_="page-of-pages"):
-        pageOfPages = div.text.strip()
-        totalPages = pageOfPages[10:]
-        totalPages = int(totalPages)
-    return totalPages
+    span = soup.find('div', class_='css-1aq64zd').find('span',class_='css-chan6m')
+
+    totalPages = span.text.split(' of ')[1]
+    totalPages = int(totalPages)
+    return 1
+    # return totalPages
 
  # Scraping all reviews
-def scrapeReviews(link, totalPages):
+def scrapeReviews(link, totalPages = 1):
     allReviews = []
-    link = link[:-1]
+    # link = link[:-1]
     page = 1
     countReviews = 1
     startAt = 1
@@ -170,15 +183,14 @@ def scrapeReviews(link, totalPages):
         elif page > 1:
             startAt = (page-1)*20
         strStartAt = str(startAt)
-        url = link+strStartAt
-        pageOfPages = "(Page " + str(page) + " of " + str(totalPages) + ")"
+        # url = link+strStartAt
+        # pageOfPages = "(Page " + str(page) + " of " + str(totalPages) + ")"
+        pageOfPages = 1
+        url = link
         print(url, pageOfPages)
         soup = runBeautifulSoup(url)
-        # print all reviews
-        for p in soup.find_all('p', {"lang": "en"}):
-            # print(countReviews)
-            review = p.text
-            # print(review, '\n')
+        for span in soup.find_all('span', {"lang": "en"}):
+            review = span.text
             allReviews.append(review)
             countReviews += 1
         page += 1
@@ -197,9 +209,9 @@ def TESToutputToTextFile(reviewList):
 
 def TESTprintAllReviews(reviewsList):
     i = 1
-    print(len(reviewsList))
+    # print(len(reviewsList))
     for review in reviewsList:
-        print(i, '\n', review, '\n')
+        # print(i, '\n', review, '\n')
         i+=1
 
 # create JSON file from Python Dictionary ()
@@ -209,7 +221,8 @@ def TESTprintAllReviews(reviewsList):
 
 
 def scrapReviewBundle(link, find):
-    url = createThePlaceURL(link, find)
+    # url = createThePlaceURL(link, find)
+    url = 'http://127.0.0.1:5500/reviewPage.html'
     soup = runBeautifulSoup(url)
     pages = findTotalReviewPages(soup)
     reviews = scrapeReviews(url, pages)
@@ -220,52 +233,53 @@ def scrapReviewBundle(link, find):
 # This was for testing all the functions before I started Flask
 # It doesn't work anymore since I changed some code inside many functions
 # to make it work for Flask
-def TESTstart():
-    # Get user input
-    userInput = TESTgetUserInput()
+# def TESTstart():
+#     print('TestStarted!')
+#     # Get user input
+#     userInput = TESTgetUserInput()
 
-    # Get search URL (List of restaurants/Places Page)
-    listURL = TESTsearchListURL(userInput)
+#     # Get search URL (List of restaurants/Places Page)
+#     listURL = TESTsearchListURL(userInput)
 
-    # created BeautifulSoup object
-    soup1 = runBeautifulSoup(listURL)
+#     # created BeautifulSoup object
+#     soup1 = runBeautifulSoup(listURL)
 
-    totalListPages = findTotalRestaurantListPages(soup1)
+#     totalListPages = findTotalRestaurantListPages(soup1)
 
-    # get all 'info' (names, links(href), and numbers of reviews)
-    # (scrape the 'info' of the places in the list, then store them into a list
-    # the list can be different, based on user input)
-    info = scrapRestaurantList(listURL, totalListPages)
+#     # get all 'info' (names, links(href), and numbers of reviews)
+#     # (scrape the 'info' of the places in the list, then store them into a list
+#     # the list can be different, based on user input)
+#     info = scrapRestaurantList(listURL, totalListPages)
 
-    print(info)
-    listNames = getListOf(info, "name")
-    listReviews = getListOf(info, "review_counts")
+#     print(info)
+#     listNames = getListOf(info, "name")
+#     listReviews = getListOf(info, "review_counts")
 
-    # Print all names and numbers of reviews for user to choose
-    printNamesAndReviews(listNames, listReviews)
+#     # Print all names and numbers of reviews for user to choose
+#     printNamesAndReviews(listNames, listReviews)
 
-    # User choose a place to find its reviews
-    chosenPlace = int(input(
-        "Enter the 'number' of the restaurant you want to see reviews: "))
+#     # User choose a place to find its reviews
+#     chosenPlace = int(input(
+#         "Enter the 'number' of the restaurant you want to see reviews: "))
 
-    # # get the href link from that chosen place
-    theLink = getTheLink(info, chosenPlace)
+#     # # get the href link from that chosen place
+#     theLink = getTheLink(info, chosenPlace)
 
-    # # create real/working url
-    thePlaceURL = createThePlaceURL(theLink, userInput)
+#     # # create real/working url
+#     thePlaceURL = createThePlaceURL(theLink, userInput)
 
-    # # create Beautiful Soup object
-    soup2 = runBeautifulSoup(thePlaceURL)
+#     # # create Beautiful Soup object
+#     soup2 = runBeautifulSoup(thePlaceURL)
 
-    # # find Total pages of reviews
-    totalPages = findTotalReviewPages(soup2)
+#     # # find Total pages of reviews
+#     totalPages = findTotalReviewPages(soup2)
 
-    # # scraping all reviews from all the pages (return a list of all reviews)
-    allReviews = scrapeReviews(thePlaceURL, totalPages)
+#     # # scraping all reviews from all the pages (return a list of all reviews)
+#     allReviews = scrapeReviews(thePlaceURL, totalPages)
 
-    outputToTextFile(allReviews)
+#     outputToTextFile(allReviews)
 
-    return allReviews
+#     return allReviews
 
 
 # -------------------------------------------------------------------------------------
