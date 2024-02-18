@@ -51,7 +51,6 @@ def scrapReviews():
     analyzedData.clear()
     analyzedData.append(data)
     dataDict['analyzedData'] = analyzedData[0]
-    print(dataDict)
     dictToJSONdata(dataDict)
 
 
@@ -67,7 +66,6 @@ def about():
 @app.route("/bubble")
 def bubble():
     name = userInput['name']
-    print(name)
     return render_template('bubble.html', title="Bubble Chart", name=name)
 
 
