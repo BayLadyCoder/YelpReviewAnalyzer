@@ -9,9 +9,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
 
 userInput = {}
-reviews = []
-analyzedData = []
-dataDict = {}
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -21,7 +18,6 @@ def searchRestaurantList():
     if form.validate_on_submit():
         near = form.near.data
         find = form.find.data
-        userInput['find'] = find
 
         return render_template('showList.html', title="Restaurant List", find=find, near=near, restaurants=getListOfRestaurants(find, near))
     else:
@@ -30,26 +26,15 @@ def searchRestaurantList():
 
 
 @app.route("/reviews", methods=['GET'])
-def scrapReviews():
-    req = request.args.get('url')
+def analyzedReviews():
+    urlPath = request.args.get('url')
     name = request.args.get('name')
-    find = userInput['find']
     userInput['name'] = name
-    reviews.clear()
-    reviews.append(scrapReviewBundle(req, find))
-    dataDict['reviews'] = reviews[0]
-    theReviews = reviews[0]
-    theWords = getRepeatedWords(theReviews)
-    # print(theWords)
-    data = analyzeReviews(theReviews)
-    analyzedData.clear()
-    analyzedData.append(data)
-    dataDict['analyzedData'] = analyzedData[0]
-    dictToJSONdata(dataDict)
+    reviews = getReviews(urlPath)
+    analyzedData = analyzeReviews(reviews)
+    dictToJSONdata(analyzedData)
 
-
-    # print(analyzedData)
-    return render_template('reviews.html', title="Reviews", theLink=userInput, reviews=theReviews, data=data, name=name, theWords=theWords)
+    return render_template('reviews.html', title="Reviews", theLink=userInput, reviews=reviews, data=analyzedData, name=name, theWords=getRepeatedWords(reviews))
 
 
 @app.route("/about")

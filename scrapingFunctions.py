@@ -108,7 +108,7 @@ def getListOf(data, key):
     return listAll
 
 # ------- Create URL of the Reviews Page (The Chosen Restaurant Page) ------- #
-def createThePlaceURL(link, find):
+def createThePlaceURL(link):
     # example = "https://www.yelp.com/biz/baltimore-built-bistro-b3-baltimore-3?start=1"
     Yelp = "https://www.yelp.com"
     start1 = "?start=1"
@@ -117,10 +117,9 @@ def createThePlaceURL(link, find):
     return Yelp+link
 
 # find total (reviews) pages to scrape all reviews 
-def findTotalReviewPages(soup):
-    totalPages = ''
-    span = soup.find('div', class_='css-1aq64zd').find('span',class_='css-chan6m')
-
+def findTotalReviewPages(url):
+    totalPages = 1
+    span = runBeautifulSoup(url).find('div', class_='css-1aq64zd').find('span',class_='css-chan6m')
     totalPages = span.text.split(' of ')[1]
     totalPages = int(totalPages)
     return 1
@@ -167,10 +166,8 @@ def TESToutputToTextFile(reviewList):
 #     with  open('new_list.json', 'w') as f:
 #         json.dump(listOfDict, f)
 
-def scrapReviewBundle(link, find):
-    # url = createThePlaceURL(link, find)
+def getReviews(urlPath):
+    # url = createThePlaceURL(urlPath)
     url = 'http://127.0.0.1:5500/reviewPage.html'
-    soup = runBeautifulSoup(url)
-    pages = findTotalReviewPages(soup)
-    reviews = scrapeReviews(url, pages)
-    return reviews
+    totalPages = findTotalReviewPages(url)
+    return scrapeReviews(url, totalPages)
