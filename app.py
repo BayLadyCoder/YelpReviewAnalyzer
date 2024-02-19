@@ -16,20 +16,14 @@ dataDict = {}
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/home", methods=['GET', 'POST'])
-def searchList():
-
+def searchRestaurantList():
     form = SearchForm(request.form)
     if form.validate_on_submit():
+        near = form.near.data
         find = form.find.data
         userInput['find'] = find
-        near = form.near.data
-        data = getListOfRestaurants(find, near)
 
-        nameList = getListOf(data, 'name')
-        reviewCountsList = getListOf(data, 'review_counts')
-        urlList = getListOf(data, 'link')
-
-        return render_template('showList.html', title="Restaurant List", find=find, near=near, names_reviews_list=zip(nameList, reviewCountsList, urlList))
+        return render_template('showList.html', title="Restaurant List", find=find, near=near, restaurants=getListOfRestaurants(find, near))
     else:
         print(form.errors)
     return render_template('index.html', title='Home', form=form)
