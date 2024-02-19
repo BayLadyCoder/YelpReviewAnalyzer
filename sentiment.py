@@ -1,6 +1,6 @@
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from jsonFunctions import dictToJSOND3
+from jsonUtils import dictToJSOND3
 
 def getRepeatedWords(reviews):
     posList = ["NN", "JJ", "VBG", "VB", "NNS", "NNP"]

@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, make_response, json
-from scrapingFunctions import *
+from restaurants import getListOfRestaurants
+from reviews import getReviews
 from forms import SearchForm
 from sentiment import analyzeReviews, translate
-from jsonFunctions import *
+from jsonUtils import dictToJSONdata, JSONtoDict
 
 
 app = Flask(__name__)
