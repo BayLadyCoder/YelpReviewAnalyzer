@@ -4,6 +4,7 @@ from reviews import getReviews
 from forms import SearchForm
 from sentiment import analyzeReviews, translate
 from jsonUtils import dictToJSONdata, JSONtoDict
+from fileUtils import createSearchRestaurantsFileName, createRestaurantReviewsFileName
 
 
 app = Flask(__name__)
@@ -18,12 +19,10 @@ def searchRestaurantList():
     if form.validate_on_submit():
         near = form.near.data
         find = form.find.data
-        filePath = './static/database/searches/'
-        fileName = '-'.join(find.lower().split(' ')) + '-' + '-'.join(near.lower().split(' '))
         # todo: look up JSON file for this search to reduce scraping same data
 
         restaurants = getListOfRestaurants(find, near)
-        dictToJSONdata({'data': restaurants, 'filePath': filePath, 'fileName': fileName})
+        dictToJSONdata({'data': restaurants, 'fileName': createSearchRestaurantsFileName(find, near)})
         return render_template('showList.html', title="Restaurant List", find=find, near=near, restaurants=restaurants)
     else:
         print(form.errors)
@@ -37,9 +36,7 @@ def analyzedReviews():
     userInput['name'] = name
     reviews = getReviews(urlPath)
     analyzedData = analyzeReviews(reviews)
-    filePath = './static/database/reviews/'
-    fileName = '-'.join(name.lower().split(' ')) + "-reviews"
-    dictToJSONdata({'data': {"reviews": reviews, "analyzedData": analyzedData}, 'filePath': filePath, 'fileName': fileName})
+    dictToJSONdata({'data': {"reviews": reviews, "analyzedData": analyzedData}, 'fileName': createRestaurantReviewsFileName(name)})
 
     return render_template('reviews.html', title="Reviews", reviews=reviews, data=analyzedData, name=name)
 
@@ -61,9 +58,7 @@ def contact():
 @app.route("/translate", methods=['GET'])
 def translateReviews():
     name = userInput.get('name')
-    filePath = './static/database/reviews/'
-    fileName = '-'.join(name.lower().split(' ')) + "-reviews"
-    data = JSONtoDict(filePath, fileName)
+    data = JSONtoDict(createRestaurantReviewsFileName(name))
     language = request.args.get('lang')
 
     return render_template('lang.html', title="Translation", reviews=translate(data['reviews'], language), name=userInput['name'], data=data['analyzedData'])
