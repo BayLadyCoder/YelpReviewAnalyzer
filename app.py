@@ -31,7 +31,7 @@ def analyzedReviews():
     userInput['name'] = name
     reviews = getReviews(urlPath)
     analyzedData = analyzeReviews(reviews)
-    dictToJSONdata(analyzedData)
+    dictToJSONdata({"reviews": reviews, "analyzedData": analyzedData})
 
     return render_template('reviews.html', title="Reviews", reviews=reviews, data=analyzedData, name=name)
 
@@ -58,14 +58,12 @@ def JSONtoDict():
 
 
 @app.route("/translate", methods=['GET'])
-def lang():
+def translateReviews():
     data = JSONtoDict()
-    theReviews = data['reviews']
-    theInput = userInput
-    lang = request.args.get('lang')
-    newReviews = translate(theReviews, lang)
-    theData = data['analyzedData']
-    return render_template('lang.html', title="Translation", reviews=newReviews, theInput=theInput, data=theData)
+    reviews = data['reviews']
+    language = request.args.get('lang')
+
+    return render_template('lang.html', title="Translation", reviews=translate(reviews, language), name=userInput['name'], data=data['analyzedData'])
 
 
 if __name__ == '__main__':
