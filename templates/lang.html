@@ -1,31 +1,36 @@
-{% extends "layout.html" %}
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 
-
-
-<div class="container sentimentContainer d-flex flex-column justify-content-center align-items-center">
-    <h1 class="text-center">{{theInput.name}}</h1>
-    <img src="/static/img/{{data.img}}" width="200px" height="200px" alt="">
-    <h2>Sentiment: {{data.sentiment}}</h2>
-    <h2>Popularity: {{data.popular}}</h2>
-    <h3 class="">{{data.summary}}</h3>
-    <a href="/bubble" target="_blank" style="color:red">See Bubble Chart</a>
+<div
+  class="container sentimentContainer d-flex flex-column justify-content-center align-items-center"
+>
+  <h1 class="text-center">{{name}}</h1>
+  <img src="/static/img/{{data.img}}" width="200px" height="200px" alt="" />
+  <h2>Sentiment: {{data.sentiment}}</h2>
+  <h2>Popularity: {{data.popular}}</h2>
+  <h3 class="">{{data.summary}}</h3>
+  <a href="/bubble" target="_blank" style="color: red">See Bubble Chart</a>
 </div>
 <div class="reviewContainer container">
-    <h1 class="text-center pt-3">Reviews</h1>
-    <div class="d-flex justify-content-center align-items-center">
-        <a href="/translate?lang=en" target="_blank" class="languages">English | </a>
-        <a href="/translate?lang=es" target="_blank" class="languages"> Spanish | </a>
-        <a href="/translate?lang=th" target="_blank" class="languages"> Thai | </a>
-        <a href="/translate?lang=zh-CN" target="_blank" class="languages"> Chinese</a>
-    </div>
-    <hr>
-    <ol>
-        {% for review in reviews %}
-        <li>{{review}}</li>
-        <hr>
-        {% endfor %}
-    </ol>
+  <h1 class="text-center pt-3">Reviews</h1>
+  <div class="d-flex justify-content-center align-items-center">
+    <a href="/translate?lang=en" target="_blank" class="languages"
+      >English |
+    </a>
+    <a href="/translate?lang=es" target="_blank" class="languages">
+      Spanish |
+    </a>
+    <a href="/translate?lang=th" target="_blank" class="languages"> Thai | </a>
+    <a href="/translate?lang=zh-CN" target="_blank" class="languages">
+      Chinese</a
+    >
+  </div>
+  <hr />
+  <ol>
+    {% for review in reviews %}
+    <li>{{review}}</li>
+    <hr />
+    {% endfor %}
+  </ol>
 </div>
 
 {% endblock %}
