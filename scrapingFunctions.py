@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import json
 
 # ------- Home Page ------- #
 # searchURL = "https://www.yelp.com/search?find_desc=thai%20food&find_loc=owings%20mills"
@@ -151,20 +150,6 @@ def scrapeReviews(link, totalPages = 1):
             countReviews += 1
         page += 1
     return allReviews
-
-def TESToutputToTextFile(reviewList):
-    fileName = "theReviews.txt"
-    file = open(fileName, 'w')
-    for review in reviewList:
-        file.write(review)
-        file.write('\n')
-
-    file.close()
-
-# create JSON file from Python Dictionary ()
-# def pythonToJSON(listOfDict):
-#     with  open('new_list.json', 'w') as f:
-#         json.dump(listOfDict, f)
 
 def getReviews(urlPath):
     # url = createThePlaceURL(urlPath)
