@@ -1,39 +1,39 @@
-{% extends "layout.html" %}
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 
-<div class="main-content d-flex justify-content-center align-items-center flex-column">
+<div
+  class="main-content d-flex justify-content-center align-items-center flex-column"
+>
+  {% if find and near %}
+  <div class="find-near py-1">
+    <p class="text-center">Find: {{find}}</p>
+    <p class="text-center">Near: {{near}}</p>
+  </div>
+  {% endif %}
 
-    {% if find and near %}
-    <div class="find-near py-1">
-        <p class="text-center">Find: {{find}}</p>
-        <p class="text-center">Near: {{near}}</p>
-    </div>
-    {% endif %}
+  <ul class="content row px-4 pt-1">
+    {% for name, reviews, url in names_reviews_list %}
+    <li class="col-12 text-white list">
+      <!-- <a class="list d-flex justify-content-between" href="/reviews?url={{url}}" data-link="{{url}}" onclick="sendLink(this)"> -->
+      <a
+        class="list d-flex justify-content-between"
+        href="/reviews?url={{url}}&name={{name}}"
+        target="_blank"
+      >
+        <span class="nameList" id="theName">{{name}}</span>
+        <span class="reviewList">
+          {% if reviews <= 1 %} {{reviews}} review {% else %} {{reviews}}
+          reviews {% endif %}
+        </span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
 
-
-    <ul class="content row px-4 pt-1">
-        {% for name, reviews, url in names_reviews_list %}
-        <li class="col-12 text-white list">
-            <!-- <a class="list d-flex justify-content-between" href="/reviews?url={{url}}" data-link="{{url}}" onclick="sendLink(this)"> -->
-            <a class="list d-flex justify-content-between" href="/reviews?url={{url}}&name={{name}}" target="_blank">
-                <span class="nameList" id="theName">{{name}}</span>
-                <span class="reviewList">
-                    {% if reviews <= 1 %}
-                    {{reviews}} review
-                    {% else %}
-                    {{reviews}} reviews
-                    {% endif %}
-                </span>
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-
-    <div class="d-flex justify-content-center mt-4 mb-5 flex-column align-items-center">
-        <a href="/" id="search-again-button">
-            Let's search again!
-        </a>
-    </div>
+  <div
+    class="d-flex justify-content-center mt-4 mb-5 flex-column align-items-center"
+  >
+    <a href="/" id="search-again-button">< Back to search</a>
+  </div>
 </div>
 
 {% endblock %}
