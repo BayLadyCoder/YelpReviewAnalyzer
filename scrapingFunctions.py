@@ -6,25 +6,6 @@ import json
 # searchURL = "https://www.yelp.com/search?find_desc=thai%20food&find_loc=owings%20mills"
 # example = "https://www.yelp.com/search?find_desc=sushi&find_loc=baltimore"
 
-#Get user input
-def TESTgetUserInput():
-    userInput = {}
-    find = input('What kind of food you are looking for: ')
-    near = input('Location: ')
-    userInput['find'] = find
-    userInput['near'] = near
-    return userInput
-
-
-# find url from the user search input
-def TESTsearchListURL(userInput):
-    Yelp = "https://www.yelp.com/search?find_desc="
-    what = userInput['find'].replace(' ', '%20')
-    where = '&find_loc=' + userInput['near'].replace(' ', '%20')
-    searchURL = Yelp + what + where
-    # print(searchURL)
-    return searchURL
-
 # find url that have list of restaurants from the user search input
 def searchListURL(find, near):
     Yelp = "https://www.yelp.com/search?find_desc="
@@ -32,7 +13,6 @@ def searchListURL(find, near):
     where = '&find_loc=' + near.replace(' ', '%20')
     searchURL = Yelp + what + where
     return searchURL
-
 
 # get code and build BeautifulSoup object
 def runBeautifulSoup(url):
@@ -54,7 +34,6 @@ def findTotalRestaurantListPages(soup):
                 totalPages = int(totalPages)
             
     return totalPages
-
 
 # Get a list of restaurants, their links(url), and numbers of reviews based on user searching input
 def scrapRestaurantList(link, totalListPages = 1):
@@ -119,10 +98,7 @@ def getListOfRestaurants(find, near):
     # totalListPages = findTotalRestaurantListPages(soup)
     # data = scrapRestaurantList(url, totalListPages)
 
-    data = scrapRestaurantList(url)
-
-    return data
-
+    return scrapRestaurantList(url)
 
 # get a list of all restaurants' names, links, or review_counts
 def getListOf(data, key):
@@ -130,25 +106,6 @@ def getListOf(data, key):
     for restaurant in data:
         listAll.append(restaurant[key])
     return listAll
-
-# Print all names of the places and the numbers of reviews
-# with their index number for the user to choose
-def TESTprintNamesAndReviews(listNames, listReviews):
-    index = 1
-    for name, reviews in zip(listNames, listReviews):
-        if reviews <= 1:
-            print(index, name, reviews, "review")  
-        else:
-            print(index, name, reviews, "reviews")  
-        index+=1  
-
-# get a specific link (when user choose a restaurant)
-def TESTgetTheLink(allInfo, index):
-    index = index -1
-    print(allInfo[index]['link'])
-    return allInfo[index]['link'] 
-
-# ---------------------------------------------------------------------------------------
 
 # ------- Create URL of the Reviews Page (The Chosen Restaurant Page) ------- #
 def createThePlaceURL(link, find):
@@ -196,7 +153,6 @@ def scrapeReviews(link, totalPages = 1):
         page += 1
     return allReviews
 
-
 def TESToutputToTextFile(reviewList):
     fileName = "theReviews.txt"
     file = open(fileName, 'w')
@@ -206,19 +162,10 @@ def TESToutputToTextFile(reviewList):
 
     file.close()
 
-
-def TESTprintAllReviews(reviewsList):
-    i = 1
-    # print(len(reviewsList))
-    for review in reviewsList:
-        # print(i, '\n', review, '\n')
-        i+=1
-
 # create JSON file from Python Dictionary ()
 # def pythonToJSON(listOfDict):
 #     with  open('new_list.json', 'w') as f:
 #         json.dump(listOfDict, f)
-
 
 def scrapReviewBundle(link, find):
     # url = createThePlaceURL(link, find)
@@ -227,64 +174,3 @@ def scrapReviewBundle(link, find):
     pages = findTotalReviewPages(soup)
     reviews = scrapeReviews(url, pages)
     return reviews
-
-
-
-# This was for testing all the functions before I started Flask
-# It doesn't work anymore since I changed some code inside many functions
-# to make it work for Flask
-# def TESTstart():
-#     print('TestStarted!')
-#     # Get user input
-#     userInput = TESTgetUserInput()
-
-#     # Get search URL (List of restaurants/Places Page)
-#     listURL = TESTsearchListURL(userInput)
-
-#     # created BeautifulSoup object
-#     soup1 = runBeautifulSoup(listURL)
-
-#     totalListPages = findTotalRestaurantListPages(soup1)
-
-#     # get all 'info' (names, links(href), and numbers of reviews)
-#     # (scrape the 'info' of the places in the list, then store them into a list
-#     # the list can be different, based on user input)
-#     info = scrapRestaurantList(listURL, totalListPages)
-
-#     print(info)
-#     listNames = getListOf(info, "name")
-#     listReviews = getListOf(info, "review_counts")
-
-#     # Print all names and numbers of reviews for user to choose
-#     printNamesAndReviews(listNames, listReviews)
-
-#     # User choose a place to find its reviews
-#     chosenPlace = int(input(
-#         "Enter the 'number' of the restaurant you want to see reviews: "))
-
-#     # # get the href link from that chosen place
-#     theLink = getTheLink(info, chosenPlace)
-
-#     # # create real/working url
-#     thePlaceURL = createThePlaceURL(theLink, userInput)
-
-#     # # create Beautiful Soup object
-#     soup2 = runBeautifulSoup(thePlaceURL)
-
-#     # # find Total pages of reviews
-#     totalPages = findTotalReviewPages(soup2)
-
-#     # # scraping all reviews from all the pages (return a list of all reviews)
-#     allReviews = scrapeReviews(thePlaceURL, totalPages)
-
-#     outputToTextFile(allReviews)
-
-#     return allReviews
-
-
-# -------------------------------------------------------------------------------------
-# ------------------ Program starts here -------------------
-# TESTING
-# allReviews = scrapeReviews("https://www.yelp.com/biz/fuji-yama-sushi-bar-reisterstown?start=1", 3)
-# outputToTextFile(allReviews)
-# pythonToJSON(allReviews)
