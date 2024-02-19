@@ -1,15 +1,6 @@
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import json
-
-
-def dictToJSOND3(dict):
-    with open('./static/bubble.json', 'w') as file:
-        json.dump(dict, file)
-
-def dictToJSONdata(dict):
-    with open(dict['filePath'] + dict['fileName'] + '.json', 'w') as file:
-        json.dump(dict['data'], file)
+from jsonFunctions import dictToJSOND3
 
 def getRepeatedWords(reviews):
     posList = ["NN", "JJ", "VBG", "VB", "NNS", "NNP"]

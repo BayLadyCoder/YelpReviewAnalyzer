@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, make_response, json
 from scrapingFunctions import *
 from forms import SearchForm
-from sentiment import analyzeReviews, getRepeatedWords, dictToJSONdata, translate
-import json
-import os
+from sentiment import analyzeReviews, translate
+from jsonFunctions import *
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
@@ -56,13 +56,6 @@ def bubble():
 @app.route("/contact")
 def contact():
     return render_template('contact.html', title="Contact")
-
-
-def JSONtoDict(filePath, fileName):
-    SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, filePath, fileName + ".json")
-    return json.load(open(json_url))
-
 
 @app.route("/translate", methods=['GET'])
 def translateReviews():
