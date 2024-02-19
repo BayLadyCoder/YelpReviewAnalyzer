@@ -99,12 +99,6 @@ def getListOfRestaurants(find, near):
 
     return scrapRestaurantList(url)
 
-# get a list of all restaurants' names, links, or review_counts
-def getListOf(data, key):
-    listAll = []
-    for restaurant in data:
-        listAll.append(restaurant[key])
-    return listAll
 
 # ------- Create URL of the Reviews Page (The Chosen Restaurant Page) ------- #
 def createThePlaceURL(link):
