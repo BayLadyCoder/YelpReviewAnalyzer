@@ -13,7 +13,6 @@
   <ul class="content row px-4 pt-1">
     {% for restaurant in restaurants %}
     <li class="col-12 text-white list">
-      <!-- <a class="list d-flex justify-content-between" href="/reviews?url={{url}}" data-link="{{url}}" onclick="sendLink(this)"> -->
       <a
         class="list d-flex justify-content-between"
         href="/reviews?url={{restaurant.link}}&name={{restaurant.name}}"
