@@ -5,11 +5,11 @@ import json
 
 def dictToJSOND3(dict):
     with open('./static/bubble.json', 'w') as file:
-        jsonf = json.dump(dict, file)
+        json.dump(dict, file)
 
 def dictToJSONdata(dict):
-    with open('./static/data.json', 'w') as file:
-        jsonf = json.dump(dict, file)
+    with open(dict['filePath'] + dict['fileName'] + '.json', 'w') as file:
+        json.dump(dict['data'], file)
 
 def getRepeatedWords(reviews):
     posList = ["NN", "JJ", "VBG", "VB", "NNS", "NNP"]
@@ -105,19 +105,23 @@ def analyzeReviews(reviewList):
     return analyzedData
 
 
+# https://github.com/ssut/py-googletrans
+# https://cloud.google.com/translate/docs
+# todo: replace textblob with google translate
 def translate(reviews, language):
     translatedReviews = []
 
     for review in reviews:
-        reviewBlob = TextBlob(review)
+        blob = TextBlob(review)
         if language == 'th':
-            review = reviewBlob.translate(to='th')
+            review = blob.translate(from_lang='en',to='th')
         elif language == 'es':
-            review = reviewBlob.translate(to='es')
+            review = blob.translate(from_lang='en',to='es')
         elif language == 'zh-CN':
-            review = reviewBlob.translate(to='zh-CN')
+            review = blob.translate(from_lang='en',to='zh-CN')
         else:
             review = review
         translatedReviews.append(review)
 
     return translatedReviews
+

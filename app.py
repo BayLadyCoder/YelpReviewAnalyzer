@@ -17,8 +17,13 @@ def searchRestaurantList():
     if form.validate_on_submit():
         near = form.near.data
         find = form.find.data
+        filePath = './static/database/searches/'
+        fileName = '-'.join(find.lower().split(' ')) + '-' + '-'.join(near.lower().split(' '))
+        # todo: look up JSON file for this search to reduce scraping same data
 
-        return render_template('showList.html', title="Restaurant List", find=find, near=near, restaurants=getListOfRestaurants(find, near))
+        restaurants = getListOfRestaurants(find, near)
+        dictToJSONdata({'data': restaurants, 'filePath': filePath, 'fileName': fileName})
+        return render_template('showList.html', title="Restaurant List", find=find, near=near, restaurants=restaurants)
     else:
         print(form.errors)
     return render_template('index.html', title='Home', form=form)
@@ -31,7 +36,9 @@ def analyzedReviews():
     userInput['name'] = name
     reviews = getReviews(urlPath)
     analyzedData = analyzeReviews(reviews)
-    dictToJSONdata({"reviews": reviews, "analyzedData": analyzedData})
+    filePath = './static/database/reviews/'
+    fileName = '-'.join(name.lower().split(' ')) + "-reviews"
+    dictToJSONdata({'data': {"reviews": reviews, "analyzedData": analyzedData}, 'filePath': filePath, 'fileName': fileName})
 
     return render_template('reviews.html', title="Reviews", reviews=reviews, data=analyzedData, name=name)
 
@@ -51,19 +58,21 @@ def contact():
     return render_template('contact.html', title="Contact")
 
 
-def JSONtoDict():
+def JSONtoDict(filePath, fileName):
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    json_url = os.path.join(SITE_ROOT, "static/", "data.json")
+    json_url = os.path.join(SITE_ROOT, filePath, fileName + ".json")
     return json.load(open(json_url))
 
 
 @app.route("/translate", methods=['GET'])
 def translateReviews():
-    data = JSONtoDict()
-    reviews = data['reviews']
+    name = userInput.get('name')
+    filePath = './static/database/reviews/'
+    fileName = '-'.join(name.lower().split(' ')) + "-reviews"
+    data = JSONtoDict(filePath, fileName)
     language = request.args.get('lang')
 
-    return render_template('lang.html', title="Translation", reviews=translate(reviews, language), name=userInput['name'], data=data['analyzedData'])
+    return render_template('lang.html', title="Translation", reviews=translate(data['reviews'], language), name=userInput['name'], data=data['analyzedData'])
 
 
 if __name__ == '__main__':
