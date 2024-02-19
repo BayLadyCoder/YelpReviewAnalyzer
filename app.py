@@ -10,7 +10,6 @@ app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
 
 userInput = {}
 
-
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/home", methods=['GET', 'POST'])
 def searchRestaurantList():
@@ -34,7 +33,7 @@ def analyzedReviews():
     analyzedData = analyzeReviews(reviews)
     dictToJSONdata(analyzedData)
 
-    return render_template('reviews.html', title="Reviews", theLink=userInput, reviews=reviews, data=analyzedData, name=name, theWords=getRepeatedWords(reviews))
+    return render_template('reviews.html', title="Reviews", reviews=reviews, data=analyzedData, name=name)
 
 
 @app.route("/about")
@@ -44,8 +43,7 @@ def about():
 
 @app.route("/bubble")
 def bubble():
-    name = userInput['name']
-    return render_template('bubble.html', title="Bubble Chart", name=name)
+    return render_template('bubble.html', title="Bubble Chart", name=userInput['name'])
 
 
 @app.route("/contact")
@@ -56,22 +54,17 @@ def contact():
 def JSONtoDict():
     SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
     json_url = os.path.join(SITE_ROOT, "static/", "data.json")
-    data = json.load(open(json_url))
-    return data
+    return json.load(open(json_url))
 
 
 @app.route("/translate", methods=['GET'])
 def lang():
-    # theReviews = reviewsDict['reviews']
-    # print(theReviews)
     data = JSONtoDict()
     theReviews = data['reviews']
     theInput = userInput
     lang = request.args.get('lang')
     newReviews = translate(theReviews, lang)
-    # data = reviewsDict['analyzedData']
     theData = data['analyzedData']
-    # print(analyzedData)
     return render_template('lang.html', title="Translation", reviews=newReviews, theInput=theInput, data=theData)
 
 
