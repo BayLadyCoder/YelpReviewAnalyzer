@@ -30,8 +30,8 @@ def findTotalRestaurantListPages(soup):
 
 # bundle functions for Flask after get user input (find and near)
 def getListOfRestaurants(find, near):
-    # url = searchListURL(find, near)
-    url = 'http://127.0.0.1:5500/index.html'
+    url = searchListURL(find, near)
+    # url = 'http://127.0.0.1:5500/index.html'
 
     # soup = runBeautifulSoup(url)
     # totalListPages = findTotalRestaurantListPages(soup)
