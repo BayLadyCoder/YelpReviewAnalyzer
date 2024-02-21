@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, flash, jso
 from restaurants import getListOfRestaurants
 from reviews import getReviews
 from forms import SearchForm
-from sentiment import analyzeReviews, translate
+from sentiment import analyzeReviews, translate, collectMostRepeatedWordsForDataVisualization
 from jsonUtils import dictToJSONdata, JSONtoDict
 from fileUtils import createSearchRestaurantsFileName, createRestaurantReviewsFileName
 
@@ -48,7 +48,10 @@ def about():
 
 @app.route("/bubble")
 def bubble():
-    return render_template('bubble.html', title="Bubble Chart", name=userInput['name'])
+    name = userInput.get('name')
+    data = JSONtoDict(createRestaurantReviewsFileName(name))
+    collectMostRepeatedWordsForDataVisualization(data['reviews'])
+    return render_template('bubble.html', title="Bubble Chart", name=name)
 
 
 @app.route("/contact")
@@ -61,7 +64,7 @@ def translateReviews():
     data = JSONtoDict(createRestaurantReviewsFileName(name))
     language = request.args.get('lang')
 
-    return render_template('lang.html', title="Translation", reviews=translate(data['reviews'], language), name=userInput['name'], data=data['analyzedData'])
+    return render_template('lang.html', title="Translation", reviews=translate(data['reviews'], language), name=name, data=data['analyzedData'])
 
 
 if __name__ == '__main__':

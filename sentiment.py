@@ -1,9 +1,8 @@
 from textblob import TextBlob
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from jsonUtils import dictToJSOND3
 
-def getRepeatedWords(reviews):
-    posList = ["NN", "JJ", "VBG", "VB", "NNS", "NNP"]
+def collectMostRepeatedWordsForDataVisualization(reviews):
+    posList = ["NN", "JJ", "VBG", "VBP", "NNS"]
     wordList = []
     countWords = {}
     mostRepeatedWords = {
@@ -26,7 +25,7 @@ def getRepeatedWords(reviews):
 
     countWords = sorted(countWords.items(), key=lambda x: x[1], reverse=True)
 
-    for key, value in countWords[:50]:
+    for key, value in countWords[:30]:
         wordBlob = TextBlob(key)
         # polarity (from -1 to 1 negative to positive)
         # subjectivity (from 0 to 1, 0 is objective and 1 is subjective)
@@ -71,7 +70,7 @@ def analyzeReviews(reviewList):
         analyzedData['summary'] = 'This restaurant got the best compliments'
         analyzedData['img'] = 'best.png'
     elif finalSentimentScore > 25:
-        analyzedData['summary'] = 'This restaurant is exellent'
+        analyzedData['summary'] = 'This restaurant is excellent'
         analyzedData['img'] = 'exellent.png'
     elif finalSentimentScore > 20:
         analyzedData['summary'] = 'This restaurant is very good'
@@ -87,10 +86,10 @@ def analyzeReviews(reviewList):
         analyzedData['img'] = 'okay.png'
 
     elif finalSentimentScore > 0:
-        analyzedData['summary'] = 'This restaurant is not bad'
+        analyzedData['summary'] = 'This restaurant is not so good'
         analyzedData['img'] = 'bad.png'
     else:
-        analyzedData['summary'] = "Don't go to this restaurant"
+        analyzedData['summary'] = "Stay away from this restaurant!"
         analyzedData['img'] = 'worse.png'
 
     return analyzedData

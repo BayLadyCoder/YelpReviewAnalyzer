@@ -1,127 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lobster|Quicksand"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Crete+Round|Lobster|Quicksand"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lobster|Overpass|Quicksand"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Ubuntu"
+      rel="stylesheet"
+    />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css?family=Lobster|Quicksand" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Crete+Round|Lobster|Quicksand" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lobster|Overpass|Quicksand" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bubble.css') }}">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='bubble.css') }}"
+    />
 
     <title>Bubble</title>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <nav class="navbar">
-        <a class="navbar-brand text-bold" id="navBrand" href="/">YelpRA</a>
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/about">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/contact">Contact</a>
-            </li>
-        </ul>
+      <a class="navbar-brand text-bold" id="navBrand" href="/">YelpRA</a>
+      <ul class="nav justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
+      </ul>
     </nav>
 
     <div class="container">
-        <h1 class="text-center" id="resName">{{name}}</h1>
+      <h1 class="text-center" id="resName">{{name}}</h1>
     </div>
-    <svg id="chart" width="960" height="800" viewBox="120 150 960 400" preserveAspectRatio="xMidYMid meet">
-    </svg>
-
-
+    <div class="w-100 d-flex justify-content-center">
+      <svg
+        id="chart"
+        width="900px"
+        height="900px"
+        viewBox="0 0 900 900"
+        preserveAspectRatio="xMidYMin"
+      ></svg>
+    </div>
 
     <section id="graph"></section>
 
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script>
-        var width = 1000,
-            height = 800;
+      var width = 900,
+        height = 900;
 
-        var chart = d3.select("#chart").append("svg")
-            .attr("width", width).attr("height", height)
-            .append("g")
-            .attr("transform", "translate(130,-30)");
+      var chart = d3
+        .select('#chart')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g');
 
-        var pack = d3.layout.pack()
-            .size([width, height - 200])
-            .padding(100);
+      var pack = d3.layout.pack().size([width, height]).padding(80);
 
-        d3.json("/static/bubble.json", function (data) {
-            var nodes = pack.nodes(data).slice(1);
-            console.log(nodes);
-            var node = chart.selectAll(".node")
-                .data(nodes).enter()
-                .append("g")
-                .attr("class", "node")
-                .attr("transform", function (d) {
-                    return `translate(${d.x},${d.y})`;
-                });
+      d3.json('/static/bubble.json', function (data) {
+        var nodes = pack.nodes(data).slice(1);
+        console.log(nodes);
+        var node = chart
+          .selectAll('.node')
+          .data(nodes)
+          .enter()
+          .append('g')
+          .attr('class', 'node')
+          .attr('transform', function (d) {
+            return `translate(${d.x},${d.y})`;
+          });
 
-            node.append("circle")
-                .attr("r", function (d) {
-                    return d.r * 3;
-                })
-                .attr("fill", function (d) {
-                    if (d.sentiment < -0.5) {
-                        return "#ff2828"
-                    }
-                    if (d.sentiment < 0) {
-                        return "#fc6537"
-                    }
-                    if (d.sentiment == 0) {
-                        return "#2188ff"
-                    }
-                    if (d.sentiment < 0.5) {
-                        return "#a3ffb2"
-                    }
-                    if (d.sentiment >= 0.5) {
-                        return "#00ef28"
-                    }
+        node
+          .append('circle')
+          .attr('r', function (d) {
+            return d.r * 1.8;
+          })
+          .attr('fill', function (d) {
+            if (d.value < 2) {
+              return '#e0e0e0';
+            } else if (d.value < 4) {
+              return '#f2faf4';
+            } else if (d.value < 6) {
+              return '#e8fcec';
+            } else if (d.value < 8) {
+              return '#cffad8';
+            } else if (d.value < 10) {
+              return '#bbfac8';
+            } else if (d.value < 12) {
+              return '#a6f7b6';
+            } else if (d.value < 14) {
+              return '#8bf7a0';
+            } else if (d.value < 16) {
+              return '#6bff88';
+            } else if (d.value < 18) {
+              return '#47ff6b';
+            } else if (d.value < 20) {
+              return '#29ff53';
+            } else {
+              return '#05ff36';
+            }
+          })
+          .attr('opacity', 1)
+          .attr('stroke', '#000')
+          .attr('stroke-width', 1);
 
-
-                }) //make nodes with children invisible
-                .attr("opacity", 1)
-                .attr("stroke", function (d) {
-                    return d.children ? "#fff" : "#424242";
-                }) //make nodes with children invisible
-                .attr("stroke-width", 1);
-
-            node.append("text")
-                .text(function (d) {
-                    return d.children ? "" : d.name;
-                })
-                .style('font-size', (d) => {
-                    if (d.value < 15) {
-                        return "10px"
-
-                    } else if (d.value < 35) {
-                        return "14px"
-
-                    } else if (d.value < 50) {
-                        return "16px"
-
-                    } else {
-                        return "20px"
-                    }
-
-                })
-                .attr("text-anchor", "middle")
-
-        });
+        node
+          .append('text')
+          .text(function (d) {
+            return d.name;
+          })
+          .style('font-size', (d) => {
+            if (d.value < 5) {
+              return '12px';
+            } else if (d.value < 10) {
+              return '14px';
+            } else if (d.value < 20) {
+              return '16px';
+            } else {
+              return '18px';
+            }
+          })
+          .attr('text-anchor', 'middle');
+      });
     </script>
-</body>
-
+  </body>
 </html>
