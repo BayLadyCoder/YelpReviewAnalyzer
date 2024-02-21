@@ -15,7 +15,7 @@ https://github.com/BayLadyCoder/YelpReviewAnalyzer/assets/33296817/c479245b-9426
 ![restaurants](https://github.com/BayLadyCoder/YelpReviewAnalyzer/assets/33296817/ab46b98e-762c-4c0a-b026-044fb2d78c57)
 
 
-# Analyzing Reviews (limit scrapping at 3 review pages)
+# Analyzing Reviews (limit scraping reviews at 3 pages)
 https://github.com/BayLadyCoder/YelpReviewAnalyzer/assets/33296817/885adcd8-ac49-4455-bcba-72ab011047d2
 
 
