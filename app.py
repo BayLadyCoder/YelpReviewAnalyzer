@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, url_for, redirect, flash, jso
 from restaurants import getListOfRestaurants
 from reviews import getReviews
 from forms import SearchForm
-from sentiment import analyzeReviews, translate, collectMostRepeatedWordsForDataVisualization
+from sentiment import analyzeReviews, translate
 from jsonUtils import dictToJSONdata, JSONtoDict
 from fileUtils import createSearchRestaurantsFileName, createRestaurantReviewsFileName
-
+from dataVisualizationPrep import prepareMostRepeatedWords
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
@@ -50,7 +50,7 @@ def about():
 def bubble():
     name = userInput.get('name')
     data = JSONtoDict(createRestaurantReviewsFileName(name))
-    collectMostRepeatedWordsForDataVisualization(data['reviews'])
+    prepareMostRepeatedWords(data['reviews'])
     return render_template('bubble.html', title="Bubble Chart", name=name)
 
 
