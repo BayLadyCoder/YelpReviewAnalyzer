@@ -16,8 +16,11 @@ def findTotalReviewPages(url):
     totalPages = span.text.split(' of ')[1]
     totalPages = int(totalPages)
 
-    if(totalPages > 2):
-        return 2
+    if "127.0.0.1" in url:
+        return 1
+
+    if(totalPages > 3):
+        return 3
     else:
         return totalPages
 
@@ -28,6 +31,7 @@ def scrapeReviews(link, totalPages = 1):
     page = 1
     countReviews = 1
     startAt = 1
+    print(f"link!!! : {link}")
     # startAt = start at review number(1,20,40,60,80) this is for the url
     while page <= totalPages:
         if page == 1:
@@ -35,11 +39,15 @@ def scrapeReviews(link, totalPages = 1):
         elif page > 1:
             startAt = (page-1)*20
         strStartAt = str(startAt)
-        url = link+strStartAt
+
+        if "127.0.0.1" in link:
+            url = link
+        else:
+            url = link+strStartAt
         pageOfPages = "(Page " + str(page) + " of " + str(totalPages) + ")"
         # pageOfPages = 1
         # url = link
-        # print(url, pageOfPages)
+        print(url, pageOfPages)
         soup = runBeautifulSoup(url)
         for span in soup.find_all('span', {"lang": "en"}):
             review = span.text
