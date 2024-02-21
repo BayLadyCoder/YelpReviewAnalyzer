@@ -1,0 +1,18 @@
+{% extends "layout.html" %} {% block content %}
+<div
+  class="container sentimentContainer d-flex flex-column justify-content-center align-items-center"
+>
+  <h1>{{loadingLabel}}</h1>
+  <div class="loader"></div>
+  <script>
+    fetch(`/analyze-reviews?url={{data.url}}&name={{data.name}}`)
+      .then((res) => res.json())
+      .then((data) => {
+        fetch('/reviews').then(() =>
+          window.location.replace('/reviews?name={{data.name}}')
+        );
+      });
+  </script>
+</div>
+
+{% endblock %}

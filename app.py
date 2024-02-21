@@ -12,8 +12,12 @@ app.config['SECRET_KEY'] = 'ac4baecbcecee02735c522e42072ede1'
 
 userInput = {}
 
-@app.route("/", methods=['GET', 'POST'])
-@app.route("/home", methods=['GET', 'POST'])
+@app.route("/", methods=['GET'])
+def home():
+    form = SearchForm(request.form)
+    return render_template('index.html', title='Home', form=form)
+
+@app.route("/restaurants", methods=['POST'])
 def searchRestaurantList():
     form = SearchForm(request.form)
     if form.validate_on_submit():
@@ -26,11 +30,17 @@ def searchRestaurantList():
         return render_template('showList.html', title="Restaurant List", find=find, near=near, restaurants=restaurants)
     else:
         print(form.errors)
-    return render_template('index.html', title='Home', form=form)
+        return render_template('index.html', title='Home', form=form)
 
 
-@app.route("/reviews", methods=['GET'])
-def analyzedReviews():
+@app.route("/loading")
+def loading():
+    urlPath = request.args.get('url')
+    name = request.args.get('name')
+    return render_template('loading.html', title="Loading", loadingLabel="Analyzing reviews..", data={'url':urlPath,'name':name})
+
+@app.route("/analyze-reviews")
+def loadingAndAnalyzingReviews():
     urlPath = request.args.get('url')
     name = request.args.get('name')
     userInput['name'] = name
@@ -38,7 +48,14 @@ def analyzedReviews():
     analyzedData = analyzeReviews(reviews)
     dictToJSONdata({'data': {"reviews": reviews, "analyzedData": analyzedData}, 'fileName': createRestaurantReviewsFileName(name)})
 
-    return render_template('reviews.html', title="Reviews", reviews=reviews, data=analyzedData, name=name)
+    return {"reviews":reviews, "data":analyzedData, "name":name}
+
+
+@app.route("/reviews", methods=['GET'])
+def showAnalyzedReviews():
+    name = request.args.get('name')
+    data = JSONtoDict(createRestaurantReviewsFileName(name))
+    return render_template('reviews.html', title="Reviews", reviews=data.get('reviews'), data=data.get('analyzedData'), name=name)
 
 
 @app.route("/about")
